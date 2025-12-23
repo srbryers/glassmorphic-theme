@@ -1,0 +1,142 @@
+{% doc %}
+  Renders a product card for collection grids and featured products.
+  Static HTML component - no island hydration required.
+
+  @param {product} product - The product object to display
+  @param {boolean} [show_vendor] - Show product vendor (default: false)
+  @param {boolean} [show_quick_add] - Show quick add button for simple products (default: true)
+  @param {boolean} [show_quick_view] - Show quick view button (default: true)
+  @param {string} [image_ratio] - Image aspect ratio (default: '3/4')
+
+  @example
+  {% render 'product-card', product: product, show_vendor: true, show_quick_add: true %}
+{% enddoc %}
+
+{%- liquid
+  assign show_vendor = show_vendor | default: false
+  assign show_quick_add = show_quick_add | default: true
+  assign show_quick_view = show_quick_view | default: true
+  assign image_ratio = image_ratio | default: '3/4'
+-%}
+
+<article class="product-card group hover-lift rounded-2xl">
+  <a href="{{ product.url }}" class="block">
+    {%- comment -%} Image {%- endcomment -%}
+    <div class="relative aspect-[{{ image_ratio }}] bg-[var(--muted)] rounded-2xl overflow-hidden mb-3 shadow-sm group-hover:shadow-lg transition-shadow duration-300">
+      {%- if product.featured_image -%}
+        <img
+          src="{{ product.featured_image | image_url: width: 600 }}"
+          alt="{{ product.featured_image.alt | default: product.title }}"
+          class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          loading="lazy"
+          width="600"
+          height="{{ 600 | divided_by: product.featured_image.aspect_ratio | round }}"
+        >
+        {%- if product.images.size > 1 -%}
+          <img
+            src="{{ product.images[1] | image_url: width: 600 }}"
+            alt="{{ product.images[1].alt | default: product.title }}"
+            class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            width="600"
+            height="{{ 600 | divided_by: product.images[1].aspect_ratio | default: 800 }}"
+            loading="lazy"
+          >
+        {%- endif -%}
+      {%- else -%}
+        <div class="w-full h-full flex items-center justify-center">
+          <svg class="w-16 h-16 text-[var(--muted-foreground)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Badges {%- endcomment -%}
+      <div class="absolute top-2 left-2 flex flex-col gap-1">
+        {%- if product.available == false -%}
+          <span class="badge bg-[var(--foreground)] text-white">{{ 'products.sold_out' | t }}</span>
+        {%- elsif product.compare_at_price > product.price -%}
+          {%- assign savings = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
+          <span class="badge-primary">{{ 'general.save' | t: amount: savings }}</span>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Quick Add / Quick View buttons with glass container {%- endcomment -%}
+      {%- if product.available -%}
+        <div class="absolute bottom-3 left-3 right-3 glass-subtle rounded-xl p-2 flex gap-2 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
+          {%- if show_quick_add and product.has_only_default_variant -%}
+            {%- comment -%} Quick Add for simple products {%- endcomment -%}
+            <button
+              type="button"
+              class="btn-primary btn-sm flex-1"
+              onclick="event.preventDefault(); event.stopPropagation(); document.dispatchEvent(new CustomEvent('cart:add', { detail: { id: {{ product.first_available_variant.id }}, quantity: 1 } }))"
+            >
+              {{ 'products.quick_add' | t }}
+            </button>
+          {%- elsif show_quick_view -%}
+            {%- comment -%} Quick View for products with variants {%- endcomment -%}
+            <button
+              type="button"
+              class="btn-primary btn-sm flex-1"
+              onclick="event.preventDefault(); event.stopPropagation(); document.dispatchEvent(new CustomEvent('quick-view:open', { detail: { productHandle: '{{ product.handle }}' } }))"
+            >
+              {{ 'products.quick_view' | t }}
+            </button>
+          {%- endif -%}
+          {%- if show_quick_view and product.has_only_default_variant -%}
+            {%- comment -%} Quick View icon button for simple products {%- endcomment -%}
+            <button
+              type="button"
+              class="w-9 h-9 flex items-center justify-center rounded-lg bg-white/80 hover:bg-white transition-colors shrink-0"
+              onclick="event.preventDefault(); event.stopPropagation(); document.dispatchEvent(new CustomEvent('quick-view:open', { detail: { productHandle: '{{ product.handle }}' } }))"
+              aria-label="{{ 'accessibility.quick_view' | t: title: product.title }}"
+            >
+              <svg class="w-5 h-5 text-[var(--foreground)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+            </button>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Details {%- endcomment -%}
+    <div class="space-y-1">
+      {%- if show_vendor and product.vendor -%}
+        <p class="text-xs text-[var(--muted-foreground)] uppercase tracking-wide">
+          {{ product.vendor }}
+        </p>
+      {%- endif -%}
+
+      <h3 class="font-medium text-[var(--foreground)] group-hover:text-[var(--primary)] transition-colors truncate">
+        {{ product.title }}
+      </h3>
+
+      <div class="flex items-center gap-2">
+        {%- if product.compare_at_price > product.price -%}
+          <span class="price price-sale">{{ product.price | money }}</span>
+          <span class="price-compare text-sm">{{ product.compare_at_price | money }}</span>
+        {%- else -%}
+          <span class="price">{{ product.price | money }}</span>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Color swatches (if available) {%- endcomment -%}
+      {%- assign color_option = product.options_by_name['Color'] -%}
+      {%- if color_option and color_option.values.size > 1 -%}
+        <div class="flex items-center gap-1 pt-1">
+          {%- for value in color_option.values limit: 4 -%}
+            <span
+              class="w-4 h-4 rounded-full border border-[var(--border)]"
+              style="background-color: {{ value | handleize }};"
+              title="{{ value }}"
+            ></span>
+          {%- endfor -%}
+          {%- if color_option.values.size > 4 -%}
+            <span class="text-xs text-[var(--muted-foreground)]">+{{ color_option.values.size | minus: 4 }}</span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </a>
+</article>

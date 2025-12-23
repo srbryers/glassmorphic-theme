@@ -1,0 +1,139 @@
+/**
+ * Design Tokens - Ported from Marketing Website
+ *
+ * Complete color palette, spacing, and theme variables
+ * matching the Attribute brand design system.
+ */
+
+@theme inline {
+  /* Colors - Map Tailwind to CSS custom properties */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+
+  /* Coastal Palette */
+  --color-sand: var(--sand);
+  --color-sand-light: var(--sand-light);
+  --color-sand-dark: var(--sand-dark);
+  --color-navy: var(--navy);
+  --color-navy-light: var(--navy-light);
+  --color-navy-dark: var(--navy-dark);
+
+  /* Typography - Beacon Brand Fonts */
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Bebas Neue', Impact, 'Arial Black', sans-serif;
+
+  /* Border Radius */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
+  --radius-pill: 40px;
+
+  /* Shadow Elevation System */
+  --shadow-soft: 0px 4px 40px 0px rgba(190, 190, 190, 0.20);
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  /* Glassmorphism Shadows (with color tint) */
+  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
+  --shadow-glass-lg: 0 16px 48px 0 rgba(0, 0, 0, 0.12);
+  --shadow-primary-sm: 0 4px 14px 0 rgba(193, 39, 45, 0.25);
+  --shadow-primary-lg: 0 10px 40px 0 rgba(193, 39, 45, 0.3);
+}
+
+:root {
+  /* Base radius */
+  --radius: 0.625rem;
+
+  /* Light Mode Colors - Beacon Brand */
+  --background: #FAFAFA; /* Warm white */
+  --foreground: #1C1C1C; /* Near black */
+  --card: #FFFFFF;
+  --card-foreground: #1C1C1C;
+  --popover: #FFFFFF;
+  --popover-foreground: #1C1C1C;
+  --primary: #C1272D; /* Beacon red - lighthouse roof */
+  --primary-foreground: #FFFFFF;
+  --secondary: #1C1C1C;
+  --secondary-foreground: #FFFFFF;
+  --muted: #F4F4F5;
+  --muted-foreground: #71717A; /* WCAG AA compliant */
+  --accent: #9DD1E3; /* Beacon blue - ocean water */
+  --accent-foreground: #1C1C1C; /* Dark text on light accent */
+  --destructive: #C1272D;
+  --destructive-foreground: #FFFFFF;
+  --success: #6B7D3D; /* Beacon green - grass */
+  --success-foreground: #FFFFFF;
+  --border: #E4E4E7;
+  --input: #E4E4E7;
+  --ring: #C1272D;
+
+  /* Coastal Palette - Sand (warm neutrals) */
+  --sand: #F5F1EB;
+  --sand-light: #FAF8F5;
+  --sand-dark: #E8E0D5;
+
+  /* Coastal Palette - Navy (deep ocean blues) */
+  --navy: #1B3A4B;
+  --navy-light: #2D5066;
+  --navy-dark: #0F2530;
+}
+
+/* Dark Mode - Beacon Brand */
+.dark {
+  --background: #1C1C1C;
+  --foreground: #FAFAFA;
+  --card: #27272A;
+  --card-foreground: #FAFAFA;
+  --popover: #27272A;
+  --popover-foreground: #FAFAFA;
+  --primary: #C1272D;
+  --primary-foreground: #FFFFFF;
+  --secondary: #FAFAFA;
+  --secondary-foreground: #1C1C1C;
+  --muted: #3F3F46;
+  --muted-foreground: #A1A1AA; /* WCAG AA compliant on dark bg */
+  --accent: #9DD1E3;
+  --accent-foreground: #1C1C1C;
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
+  --success: #6B7D3D;
+  --success-foreground: #FFFFFF;
+  --border: #3F3F46;
+  --input: #3F3F46;
+  --ring: #C1272D;
+
+  /* Coastal Palette - Sand (darker for dark mode) */
+  --sand: #2A2520;
+  --sand-light: #353025;
+  --sand-dark: #1F1B18;
+
+  /* Coastal Palette - Navy (lighter for dark mode) */
+  --navy: #1B3A4B;
+  --navy-light: #2D5066;
+  --navy-dark: #0F2530;
+}

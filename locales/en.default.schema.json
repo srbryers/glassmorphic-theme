@@ -1,0 +1,42 @@
+{
+  "sections": {
+    "404": {
+      "name": "404 Page",
+      "settings": {
+        "show_popular_links": {
+          "label": "Show popular links"
+        },
+        "menu": {
+          "label": "Menu for popular links"
+        }
+      }
+    },
+    "featured_collection": {
+      "name": "Featured collection",
+      "settings": {
+        "heading": {
+          "label": "Heading"
+        },
+        "collection": {
+          "label": "Collection"
+        },
+        "products_to_show": {
+          "label": "Products to show"
+        },
+        "enable_bento": {
+          "label": "Enable bento layout",
+          "info": "Display first product larger in a 2x2 grid"
+        },
+        "show_quick_add": {
+          "label": "Show quick add button"
+        },
+        "show_view_all": {
+          "label": "Show 'View all' link"
+        }
+      },
+      "presets": {
+        "name": "Featured collection"
+      }
+    }
+  }
+}

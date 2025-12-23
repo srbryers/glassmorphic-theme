@@ -1,0 +1,103 @@
+{% doc %}
+  Renders a product image gallery with thumbnails and swipe support.
+  Features glass navigation buttons and enhanced thumbnail styling.
+  Hydrates when visible using island architecture (IntersectionObserver).
+
+  @param {object} [images] - Product images collection (default: product.images)
+  @param {image} [featured] - Featured image to display first (default: first image)
+
+  @example
+  {% render 'image-gallery', images: product.images, featured: product.featured_image %}
+{% enddoc %}
+
+{%- liquid
+  assign gallery_images = images | default: product.images
+  assign featured = featured | default: gallery_images.first
+-%}
+
+{%- assign has_images = false -%}
+{%- if featured != blank -%}
+  {%- assign has_images = true -%}
+{%- endif -%}
+
+<div
+  data-island="image-gallery"
+  data-hydrate="visible"
+>
+  <image-gallery class="block">
+    {%- comment -%} Main image with glass container {%- endcomment -%}
+    <div class="group relative aspect-product bg-[var(--muted)] rounded-2xl overflow-hidden mb-4 shadow-sm">
+      {%- if has_images -%}
+      <img
+        data-main-image
+        src="{{ featured | image_url: width: 800 }}"
+        alt="{{ featured.alt | default: product.title }}"
+        class="w-full h-full object-cover transition-all duration-300"
+        width="800"
+        height="{{ 800 | divided_by: featured.aspect_ratio | default: 800 }}"
+        loading="eager"
+      >
+      {%- else -%}
+      {%- comment -%} Placeholder for products without images {%- endcomment -%}
+      <div class="w-full h-full flex items-center justify-center text-[var(--muted-foreground)]">
+        <svg class="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+      </div>
+      {%- endif -%}
+
+      {%- if gallery_images.size > 1 -%}
+        {%- comment -%} Glass navigation arrows {%- endcomment -%}
+        <button
+          data-prev
+          class="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-white/90 backdrop-blur-sm hover:bg-white hover:scale-110 hover:shadow-lg rounded-xl shadow-glass transition-all duration-300 opacity-0 group-hover:opacity-100 active:scale-95"
+          aria-label="{{ 'accessibility.previous_image' | t }}"
+        >
+          <svg class="w-5 h-5 text-[var(--foreground)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <button
+          data-next
+          class="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-white/90 backdrop-blur-sm hover:bg-white hover:scale-110 hover:shadow-lg rounded-xl shadow-glass transition-all duration-300 opacity-0 group-hover:opacity-100 active:scale-95"
+          aria-label="{{ 'accessibility.next_image' | t }}"
+        >
+          <svg class="w-5 h-5 text-[var(--foreground)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </button>
+
+        {%- comment -%} Image counter badge {%- endcomment -%}
+        <div class="absolute bottom-3 right-3 px-3 py-1.5 bg-black/50 backdrop-blur-sm text-white text-xs font-medium rounded-lg">
+          <span data-current-index>1</span> / {{ gallery_images.size }}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Thumbnails with enhanced styling {%- endcomment -%}
+    {%- if gallery_images.size > 1 -%}
+      <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2">
+        {%- for image in gallery_images -%}
+          <button
+            data-thumbnail
+            data-full-src="{{ image | image_url: width: 800 }}"
+            class="aspect-product bg-[var(--muted)] rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-lg hover:scale-105 {% if forloop.first %}ring-2 ring-[var(--primary)] ring-offset-2 scale-[1.02]{% else %}opacity-70 hover:opacity-100{% endif %}"
+            role="tab"
+            aria-selected="{{ forloop.first }}"
+            aria-label="{{ 'accessibility.view_image' | t: index: forloop.index }}"
+            tabindex="0"
+          >
+            <img
+              src="{{ image | image_url: width: 150 }}"
+              alt="{{ image.alt | default: product.title }}"
+              class="w-full h-full object-cover"
+              width="150"
+              height="150"
+              loading="lazy"
+            >
+          </button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </image-gallery>
+</div>

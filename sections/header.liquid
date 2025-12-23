@@ -1,0 +1,59 @@
+{%- comment -%}
+  Header Section
+
+  Main site header with navigation.
+  Uses header-nav island for interactivity.
+{%- endcomment -%}
+
+<header class="header sticky top-0 z-40 bg-white border-b border-[var(--border)] transition-shadow duration-200">
+  {% render 'header-nav',
+    logo_image: section.settings.logo,
+    logo_width: section.settings.logo_width,
+    show_store_name: section.settings.show_store_name,
+    menu: section.settings.menu
+  %}
+</header>
+
+{%- comment -%} Cart Drawer - placed at end of header for semantic order {%- endcomment -%}
+{% render 'cart-drawer' %}
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo width",
+      "min": 50,
+      "max": 200,
+      "step": 10,
+      "default": 120,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_store_name",
+      "label": "Show store name",
+      "default": false,
+      "info": "Display store name next to logo (or alone if no logo)"
+    }
+  ]
+}
+{% endschema %}

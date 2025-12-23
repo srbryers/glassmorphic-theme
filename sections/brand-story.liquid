@@ -1,0 +1,161 @@
+{%- comment -%}
+  Brand Story Section
+
+  A 50/50 image and text split layout for brand storytelling.
+  Image can be positioned on left or right.
+{%- endcomment -%}
+
+{%- liquid
+  assign bg_color = section.settings.background_color
+  assign image_position = section.settings.image_position
+-%}
+
+{%- comment -%} Wave divider - colored to match this section {%- endcomment -%}
+<div class="w-full leading-none" style="margin-top: -60px; margin-bottom: -2px; position: relative; z-index: 10;">
+  {% render 'wave-divider', color: bg_color, direction: 'up', animate: true %}
+</div>
+
+<section class="relative py-16 md:py-24" style="background-color: {{ bg_color }}; margin-top: -1px;">
+  <div class="container">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+      {%- comment -%} Image Column {%- endcomment -%}
+      <div class="{% if image_position == 'right' %}lg:order-2{% endif %}">
+        {%- if section.settings.image != blank -%}
+          <div class="relative rounded-3xl overflow-hidden shadow-xl">
+            <img
+              src="{{ section.settings.image | image_url: width: 800 }}"
+              alt="{{ section.settings.image.alt | default: section.settings.heading }}"
+              width="800"
+              height="{{ 800 | divided_by: section.settings.image.aspect_ratio }}"
+              class="w-full h-auto"
+              loading="lazy"
+            >
+            {%- comment -%} Decorative overlay {%- endcomment -%}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none"></div>
+          </div>
+        {%- else -%}
+          {%- comment -%} Placeholder image {%- endcomment -%}
+          <div class="aspect-[4/3] rounded-3xl bg-[var(--muted)] flex items-center justify-center shadow-xl">
+            <svg class="w-24 h-24 text-[var(--muted-foreground)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Text Column {%- endcomment -%}
+      <div class="{% if image_position == 'right' %}lg:order-1 lg:pr-8{% else %}lg:pl-8{% endif %}">
+        {%- if section.settings.subheading != blank -%}
+          <span class="inline-block text-sm font-medium text-[var(--primary)] uppercase tracking-wider mb-4">
+            {{ section.settings.subheading }}
+          </span>
+        {%- endif -%}
+
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--foreground)] mb-6">
+          {{ section.settings.heading | default: 'Our Story' }}
+        </h2>
+
+        <div class="prose prose-lg text-[var(--muted-foreground)] mb-8">
+          {%- if section.settings.text != blank -%}
+            {{ section.settings.text }}
+          {%- else -%}
+            <p>Founded on the belief that basics should be anything but basic. We craft each piece with intention, using premium materials that feel as good as they look.</p>
+            <p>From our coastal New England roots, we bring you timeless essentials designed to be worn, washed, and loved for years to come.</p>
+          {%- endif -%}
+        </div>
+
+        {%- if section.settings.button_text != blank -%}
+          <a
+            href="{{ section.settings.button_link }}"
+            class="btn-outline"
+          >
+            {{ section.settings.button_text }}
+            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Decorative elements {%- endcomment -%}
+  <div class="absolute top-1/4 {% if image_position == 'right' %}right-0{% else %}left-0{% endif %} w-64 h-64 bg-[var(--accent)]/10 rounded-full blur-3xl pointer-events-none"></div>
+</section>
+
+{% schema %}
+{
+  "name": "Brand Story",
+  "tag": "section",
+  "class": "section-brand-story",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Our Story"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Built on Basics"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Founded on the belief that basics should be anything but basic. We craft each piece with intention, using premium materials that feel as good as they look.</p><p>From our coastal New England roots, we bring you timeless essentials designed to be worn, washed, and loved for years to come.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#F5F1EB"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Story"
+    }
+  ]
+}
+{% endschema %}

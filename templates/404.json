@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "main-404": {
+      "type": "main-404",
+      "settings": {
+        "show_popular_links": true,
+        "menu": "main-menu"
+      }
+    }
+  },
+  "order": ["main-404"]
+}

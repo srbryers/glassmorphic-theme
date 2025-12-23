@@ -1,0 +1,80 @@
+{% doc %}
+  Renders an accessible modal dialog with focus trapping.
+  Hydrates when browser is idle using island architecture.
+
+  @param {string} [id] - Unique modal identifier (default: 'modal')
+  @param {string} [title] - Modal title displayed in header (default: 'Modal')
+  @param {string} [size] - Modal width: 'sm' | 'md' | 'lg' | 'xl' | 'full' (default: 'md')
+  @param {boolean} [show_footer] - Show footer with Cancel/Confirm buttons (default: false)
+  @param {string} [content] - Modal body content
+
+  @example
+  {% render 'modal', id: 'confirm-delete', title: 'Confirm deletion', size: 'sm', show_footer: true %}
+{% enddoc %}
+
+{%- liquid
+  assign modal_id = id | default: 'modal'
+  assign modal_title = title | default: 'Modal'
+  assign modal_size = size | default: 'md'
+-%}
+
+<div
+  data-island="modal"
+  data-hydrate="idle"
+>
+  <modal-island
+    class="fixed inset-0 z-50 hidden"
+    data-modal-id="{{ modal_id }}"
+    aria-labelledby="{{ modal_id }}-title"
+    aria-modal="true"
+    role="dialog"
+  >
+    {%- comment -%} Overlay with backdrop blur {%- endcomment -%}
+    <div
+      data-modal-overlay
+      class="fixed inset-0 bg-black/40 backdrop-blur-soft opacity-0 transition-opacity duration-300 hidden"
+    ></div>
+
+    {%- comment -%} Dialog with glassmorphism {%- endcomment -%}
+    <div class="fixed inset-0 flex items-center justify-center p-4">
+      <div
+        data-modal-dialog
+        class="w-full {% case modal_size %}{% when 'sm' %}max-w-sm{% when 'md' %}max-w-md{% when 'lg' %}max-w-lg{% when 'xl' %}max-w-xl{% when 'full' %}max-w-4xl{% endcase %} glass rounded-2xl shadow-glass-lg opacity-0 scale-95 transition-all duration-300 hidden"
+      >
+        {%- comment -%} Header {%- endcomment -%}
+        <div class="flex items-center justify-between px-6 py-4 border-b border-[var(--border)]">
+          <h2 id="{{ modal_id }}-title" class="text-lg font-bold text-[var(--foreground)]">
+            {{ modal_title }}
+          </h2>
+          <button
+            data-modal-close
+            type="button"
+            class="btn-icon"
+            aria-label="{{ 'accessibility.close_modal' | t }}"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        {%- comment -%} Content {%- endcomment -%}
+        <div class="px-6 py-4">
+          {{ content }}
+        </div>
+
+        {%- comment -%} Footer (optional) {%- endcomment -%}
+        {%- if show_footer -%}
+          <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-white/20 bg-white/30 rounded-b-2xl">
+            <button type="button" data-modal-close class="btn-outline">
+              {{ 'general.cancel' | t }}
+            </button>
+            <button type="button" class="btn-primary">
+              {{ 'general.confirm' | t }}
+            </button>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </modal-island>
+</div>

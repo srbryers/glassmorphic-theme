@@ -1,0 +1,113 @@
+{
+  "general": {
+    "shop_name": "Beacon Basics",
+    "home": "Home",
+    "search": "Search",
+    "search_placeholder": "Search products...",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close",
+    "save": "Save {{ amount }}%",
+    "view_all": "View all",
+    "404": {
+      "title": "Page not found",
+      "description": "Sorry, we couldn't find the page you're looking for. It might have been moved or deleted.",
+      "back_home": "Back to home",
+      "browse_products": "Browse products",
+      "search_hint": "Or try searching for what you need:",
+      "popular_links": "Popular pages:"
+    }
+  },
+  "accessibility": {
+    "skip_to_content": "Skip to content",
+    "close": "Close",
+    "close_modal": "Close modal",
+    "close_cart": "Close cart",
+    "close_quick_view": "Close quick view",
+    "menu": "Menu",
+    "open_menu": "Open menu",
+    "cart": "Cart",
+    "open_cart": "Open cart",
+    "search": "Search",
+    "account": "Account",
+    "decrease_quantity": "Decrease quantity",
+    "increase_quantity": "Increase quantity",
+    "quantity": "Quantity",
+    "previous_image": "Previous image",
+    "next_image": "Next image",
+    "view_image": "View image {{ index }}",
+    "quick_view": "Quick view {{ title }}"
+  },
+  "products": {
+    "add_to_cart": "Add to cart",
+    "quick_add": "Quick add",
+    "quick_view": "Quick view",
+    "sold_out": "Sold out",
+    "unavailable": "Unavailable",
+    "quantity": "Quantity",
+    "price": "Price",
+    "from_price": "From {{ price }}",
+    "description": "Description",
+    "reviews": "reviews"
+  },
+  "cart": {
+    "title": "Your cart",
+    "empty": "Your cart is empty",
+    "empty_description": "Looks like you haven't added anything yet.",
+    "continue_shopping": "Continue shopping",
+    "start_shopping": "Start shopping",
+    "checkout": "Checkout",
+    "secure_checkout": "Secure checkout",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "shipping_at_checkout": "Calculated at checkout",
+    "total": "Total",
+    "remove": "Remove",
+    "remove_item": "Remove item",
+    "note_label": "Order notes",
+    "note_placeholder": "Special instructions for your order...",
+    "view_cart": "View cart",
+    "update_cart": "Update cart",
+    "order_summary": "Order summary",
+    "payment_methods": "All cards accepted"
+  },
+  "collections": {
+    "title": "Collections",
+    "empty": "No products found",
+    "empty_description": "This collection is empty.",
+    "browse_all": "Browse All Products",
+    "sort_by": "Sort by"
+  },
+  "pagination": {
+    "previous": "Previous page",
+    "next": "Next page"
+  },
+  "customer": {
+    "login": "Log in",
+    "logout": "Log out",
+    "account": "Account",
+    "register": "Create account"
+  },
+  "newsletter": {
+    "title": "Stay updated",
+    "description": "Subscribe for exclusive offers and updates.",
+    "email_placeholder": "Enter your email",
+    "subscribe": "Subscribe"
+  },
+  "footer": {
+    "description": "Quality basics for everyday.",
+    "copyright": "All rights reserved."
+  },
+  "social": {
+    "instagram": "Instagram",
+    "twitter": "Twitter",
+    "facebook": "Facebook",
+    "tiktok": "TikTok",
+    "youtube": "YouTube"
+  },
+  "sections": {
+    "featured_collection": {
+      "select_collection": "Select a collection in the theme editor to display products."
+    }
+  }
+}

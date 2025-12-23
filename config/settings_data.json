@@ -1,0 +1,23 @@
+{
+  "current": {
+    "color_primary": "#FC4A3F",
+    "color_secondary": "#332626",
+    "color_background": "#FFFFFF",
+    "color_text": "#332626",
+    "logo_width": 150,
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "show_store_name": false
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {
+          "show_store_name": false
+        }
+      }
+    }
+  }
+}

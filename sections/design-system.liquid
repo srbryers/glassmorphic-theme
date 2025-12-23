@@ -1,0 +1,249 @@
+{%- comment -%}
+  Design System Showcase Section
+
+  Demonstrates all design system components:
+  - Colors
+  - Typography
+  - Buttons
+  - Forms
+  - Badges
+  - Cards
+{%- endcomment -%}
+
+<section class="section bg-[var(--background)]">
+  <div class="container">
+    <div class="text-center mb-12">
+      <h2 class="mb-4">{{ section.settings.heading }}</h2>
+      <p class="lead max-w-2xl mx-auto">{{ section.settings.description }}</p>
+    </div>
+
+    {%- comment -%} Colors {%- endcomment -%}
+    <div class="mb-16">
+      <h3 class="mb-6">Colors</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        <div class="text-center">
+          <div class="w-full aspect-square rounded-lg bg-[var(--primary)] mb-2"></div>
+          <p class="text-sm font-medium">Primary</p>
+          <p class="text-xs text-[var(--muted-foreground)]">#FC4A3F</p>
+        </div>
+        <div class="text-center">
+          <div class="w-full aspect-square rounded-lg bg-[var(--secondary)] mb-2"></div>
+          <p class="text-sm font-medium">Secondary</p>
+          <p class="text-xs text-[var(--muted-foreground)]">#332626</p>
+        </div>
+        <div class="text-center">
+          <div class="w-full aspect-square rounded-lg bg-[var(--accent)] mb-2"></div>
+          <p class="text-sm font-medium">Accent</p>
+          <p class="text-xs text-[var(--muted-foreground)]">#0075FF</p>
+        </div>
+        <div class="text-center">
+          <div class="w-full aspect-square rounded-lg bg-[var(--muted)] border border-[var(--border)] mb-2"></div>
+          <p class="text-sm font-medium">Muted</p>
+          <p class="text-xs text-[var(--muted-foreground)]">#F5F5F5</p>
+        </div>
+        <div class="text-center">
+          <div class="w-full aspect-square rounded-lg bg-[var(--success)] mb-2"></div>
+          <p class="text-sm font-medium">Success</p>
+          <p class="text-xs text-[var(--muted-foreground)]">#22C55E</p>
+        </div>
+        <div class="text-center">
+          <div class="w-full aspect-square rounded-lg bg-[var(--destructive)] mb-2"></div>
+          <p class="text-sm font-medium">Destructive</p>
+          <p class="text-xs text-[var(--muted-foreground)]">oklch</p>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} Typography {%- endcomment -%}
+    <div class="mb-16">
+      <h3 class="mb-6">Typography</h3>
+      <div class="space-y-4 max-w-2xl">
+        <div>
+          <p class="text-xs text-[var(--muted-foreground)] mb-1">H1 - Heading</p>
+          <h1 class="text-4xl">The quick brown fox</h1>
+        </div>
+        <div>
+          <p class="text-xs text-[var(--muted-foreground)] mb-1">H2 - Heading</p>
+          <h2 class="text-3xl">The quick brown fox</h2>
+        </div>
+        <div>
+          <p class="text-xs text-[var(--muted-foreground)] mb-1">H3 - Heading</p>
+          <h3 class="text-2xl">The quick brown fox</h3>
+        </div>
+        <div>
+          <p class="text-xs text-[var(--muted-foreground)] mb-1">Body - Inter</p>
+          <p>The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+        </div>
+        <div>
+          <p class="text-xs text-[var(--muted-foreground)] mb-1">Lead - Larger body text</p>
+          <p class="lead">The quick brown fox jumps over the lazy dog.</p>
+        </div>
+        <div>
+          <p class="text-xs text-[var(--muted-foreground)] mb-1">Small / Muted</p>
+          <small>The quick brown fox jumps over the lazy dog.</small>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} Buttons {%- endcomment -%}
+    <div class="mb-16">
+      <h3 class="mb-6">Buttons</h3>
+      <div class="flex flex-wrap gap-4 mb-6">
+        <button class="btn-primary">Primary</button>
+        <button class="btn-secondary">Secondary</button>
+        <button class="btn-outline">Outline</button>
+        <button class="btn-ghost">Ghost</button>
+        <button class="btn-link">Link</button>
+        <button class="btn-destructive">Destructive</button>
+      </div>
+      <div class="flex flex-wrap gap-4 mb-6">
+        <button class="btn-primary btn-sm">Small</button>
+        <button class="btn-primary">Default</button>
+        <button class="btn-primary btn-lg">Large</button>
+      </div>
+      <div class="flex flex-wrap gap-4">
+        <button class="btn-primary" disabled>Disabled</button>
+        <button class="btn-icon" aria-label="Menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    {%- comment -%} Forms {%- endcomment -%}
+    <div class="mb-16">
+      <h3 class="mb-6">Form Controls</h3>
+      <div class="grid md:grid-cols-2 gap-8 max-w-4xl">
+        <div class="space-y-4">
+          <div class="form-field">
+            <label class="label" for="demo-input">Text Input</label>
+            <input type="text" id="demo-input" class="input" placeholder="Enter your name...">
+          </div>
+          <div class="form-field">
+            <label class="label" for="demo-email">Email Input</label>
+            <input type="email" id="demo-email" class="input" placeholder="you@example.com">
+            <p class="form-helper">We'll never share your email.</p>
+          </div>
+          <div class="form-field">
+            <label class="label" for="demo-error">Error State</label>
+            <input type="text" id="demo-error" class="input-error" value="Invalid input">
+            <p class="form-error">Please enter a valid value.</p>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <div class="form-field">
+            <label class="label" for="demo-select">Select</label>
+            <select id="demo-select" class="select">
+              <option>Option 1</option>
+              <option>Option 2</option>
+              <option>Option 3</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="label" for="demo-textarea">Textarea</label>
+            <textarea id="demo-textarea" class="textarea" placeholder="Write your message..."></textarea>
+          </div>
+          <div class="flex items-center gap-6">
+            <div class="flex items-center gap-2">
+              <input type="checkbox" id="demo-checkbox" class="checkbox" checked>
+              <label for="demo-checkbox" class="label">Checkbox</label>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="radio" id="demo-radio" name="demo-radio" class="radio" checked>
+              <label for="demo-radio" class="label">Radio</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} Badges {%- endcomment -%}
+    <div class="mb-16">
+      <h3 class="mb-6">Badges</h3>
+      <div class="flex flex-wrap gap-3">
+        <span class="badge">Default</span>
+        <span class="badge-primary">Primary</span>
+        <span class="badge-success">Success</span>
+        <span class="badge-destructive">Destructive</span>
+      </div>
+    </div>
+
+    {%- comment -%} Cards {%- endcomment -%}
+    <div class="mb-16">
+      <h3 class="mb-6">Cards</h3>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="card">
+          <h4 class="mb-2">Basic Card</h4>
+          <p class="text-[var(--muted-foreground)]">This is a basic card with some content inside.</p>
+        </div>
+        <div class="card card-hover cursor-pointer">
+          <h4 class="mb-2">Hover Card</h4>
+          <p class="text-[var(--muted-foreground)]">Hover over this card to see the shadow effect.</p>
+        </div>
+        <div class="card">
+          <span class="badge-primary mb-3">New</span>
+          <h4 class="mb-2">Card with Badge</h4>
+          <p class="text-[var(--muted-foreground)]">Cards can contain other components.</p>
+          <button class="btn-primary mt-4">Action</button>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} Quantity Selector {%- endcomment -%}
+    <div class="mb-16">
+      <h3 class="mb-6">Quantity Selector</h3>
+      <div class="quantity-selector">
+        <button aria-label="Decrease">−</button>
+        <input type="number" value="1" min="1" aria-label="Quantity">
+        <button aria-label="Increase">+</button>
+      </div>
+    </div>
+
+    {%- comment -%} Animations {%- endcomment -%}
+    <div>
+      <h3 class="mb-6">Animations</h3>
+      <div class="grid md:grid-cols-4 gap-6">
+        <div class="card text-center animate-fade-in-up animation-delay-100">
+          <p class="text-sm text-[var(--muted-foreground)]">fade-in-up</p>
+        </div>
+        <div class="card text-center animate-scale-in animation-delay-200">
+          <p class="text-sm text-[var(--muted-foreground)]">scale-in</p>
+        </div>
+        <div class="card text-center animate-slide-in-left animation-delay-300">
+          <p class="text-sm text-[var(--muted-foreground)]">slide-in-left</p>
+        </div>
+        <div class="card text-center animate-pulse-gentle">
+          <p class="text-sm text-[var(--muted-foreground)]">pulse-gentle</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Design System",
+  "tag": "section",
+  "class": "section-design-system",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Design System"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "A comprehensive design system ported from our marketing website, featuring consistent colors, typography, and components."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Design System"
+    }
+  ]
+}
+{% endschema %}

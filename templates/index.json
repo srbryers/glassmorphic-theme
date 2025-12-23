@@ -1,0 +1,116 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "show_lighthouse_beam": true,
+        "heading": "Beacon Basics",
+        "subheading": "Quality basics for everyday",
+        "button_label": "Shop the Heavyweight Tee",
+        "button_link": "shopify://products/heavyweight-t-shirt"
+      }
+    },
+    "product-spotlight": {
+      "type": "product-spotlight",
+      "settings": {
+        "product": "heavyweight-t-shirt",
+        "eyebrow": "Featured Product",
+        "heading": "The Heavyweight Tee",
+        "description": "Our signature piece, crafted from premium heavyweight cotton for lasting comfort and durability. This is the only t-shirt you'll ever need.",
+        "button_text": "Shop Now",
+        "background_color": "#F5F1EB"
+      },
+      "blocks": {
+        "feature-1": {
+          "type": "feature",
+          "settings": {
+            "text": "100% premium heavyweight cotton"
+          }
+        },
+        "feature-2": {
+          "type": "feature",
+          "settings": {
+            "text": "Relaxed, comfortable fit"
+          }
+        },
+        "feature-3": {
+          "type": "feature",
+          "settings": {
+            "text": "Pre-shrunk to maintain shape"
+          }
+        },
+        "feature-4": {
+          "type": "feature",
+          "settings": {
+            "text": "Made responsibly"
+          }
+        }
+      },
+      "block_order": ["feature-1", "feature-2", "feature-3", "feature-4"]
+    },
+    "value-props": {
+      "type": "value-props",
+      "settings": {
+        "background_color": "#FFFFFF"
+      },
+      "blocks": {
+        "prop-1": {
+          "type": "value_prop",
+          "settings": {
+            "icon": "quality",
+            "heading": "Premium Quality",
+            "description": "Heavyweight fabrics that last wash after wash"
+          }
+        },
+        "prop-2": {
+          "type": "value_prop",
+          "settings": {
+            "icon": "shipping",
+            "heading": "Free Shipping",
+            "description": "On all orders over $75"
+          }
+        },
+        "prop-3": {
+          "type": "value_prop",
+          "settings": {
+            "icon": "returns",
+            "heading": "Easy Returns",
+            "description": "30-day hassle-free returns"
+          }
+        },
+        "prop-4": {
+          "type": "value_prop",
+          "settings": {
+            "icon": "sustainable",
+            "heading": "Made Responsibly",
+            "description": "Ethically sourced materials"
+          }
+        }
+      },
+      "block_order": ["prop-1", "prop-2", "prop-3", "prop-4"]
+    },
+    "brand-story": {
+      "type": "brand-story",
+      "settings": {
+        "image_position": "right",
+        "subheading": "Our Story",
+        "heading": "Built on Basics",
+        "text": "<p>Founded on the belief that basics should be anything but basic. We craft each piece with intention, using premium materials that feel as good as they look.</p><p>From our coastal New England roots, we bring you timeless essentials designed to be worn, washed, and loved for years to come.</p>",
+        "button_text": "Learn More",
+        "background_color": "#F5F1EB"
+      }
+    },
+    "newsletter": {
+      "type": "newsletter-section",
+      "settings": {
+        "heading": "Stay in the Loop",
+        "description": "Subscribe to our newsletter for updates, new arrivals, and exclusive offers.",
+        "placeholder": "Enter your email",
+        "button_text": "Subscribe",
+        "disclaimer": "We respect your privacy. Unsubscribe at any time.",
+        "background_color": "#1B3A4B"
+      }
+    }
+  },
+  "order": ["hero", "product-spotlight", "value-props", "brand-story", "newsletter"]
+}

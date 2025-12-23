@@ -1,0 +1,50 @@
+{% doc %}
+  Demo component: Simple counter to test client:load hydration strategy.
+  Hydrates immediately when the page loads.
+
+  @param {number} [initial_count] - Initial counter value (default: 0)
+
+  @example
+  {% render 'test-counter', initial_count: 5 %}
+{% enddoc %}
+
+{%- liquid
+  assign initial = initial_count | default: 0
+-%}
+
+<div
+  data-island="test-counter"
+  data-hydrate="load"
+>
+  <test-counter data-initial-count="{{ initial }}" class="block p-6 bg-white rounded-xl border border-[var(--color-border)] shadow-sm">
+    <p class="text-sm font-medium text-[var(--color-muted-foreground)] mb-2">
+      Counter (client:load)
+    </p>
+    <div class="flex items-center gap-4">
+      <button
+        data-decrement
+        class="w-10 h-10 flex items-center justify-center rounded-full bg-[var(--color-muted)] hover:bg-[var(--color-border)] transition-colors text-lg font-bold"
+        aria-label="Decrease"
+      >
+        −
+      </button>
+      <span
+        data-count
+        class="text-4xl font-bold text-[var(--color-foreground)] min-w-[3rem] text-center"
+      >
+        {{ initial }}
+      </span>
+      <button
+        data-increment
+        class="w-10 h-10 flex items-center justify-center rounded-full bg-[var(--color-primary)] text-white hover:opacity-90 transition-opacity text-lg font-bold"
+        aria-label="Increase"
+      >
+        +
+      </button>
+    </div>
+    <p class="text-xs text-[var(--color-muted-foreground)] mt-3">
+      <span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1"></span>
+      Hydrates immediately on page load
+    </p>
+  </test-counter>
+</div>

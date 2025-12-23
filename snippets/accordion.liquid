@@ -1,0 +1,155 @@
+{% doc %}
+  Renders an accordion component with expandable/collapsible sections.
+  Features glass effects and smooth animations.
+  Hydrates when visible using island architecture.
+
+  @param {object} items - Accordion items (blocks with title/content settings)
+  @param {boolean} [allow_multiple] - Allow multiple sections open simultaneously (default: false)
+  @param {string} [variant] - Style variant: 'default' | 'card' | 'minimal' (default: 'default')
+
+  @example
+  {% render 'accordion', items: section.blocks, allow_multiple: true, variant: 'card' %}
+{% enddoc %}
+
+{%- liquid
+  assign allow_multiple = allow_multiple | default: false
+  assign variant = variant | default: 'default'
+-%}
+
+<div
+  data-island="accordion"
+  data-hydrate="visible"
+>
+  {%- case variant -%}
+    {%- when 'card' -%}
+      {%- comment -%} Card variant - separated items with shadows {%- endcomment -%}
+      <accordion-island
+        class="block space-y-3"
+        {% if allow_multiple %}data-allow-multiple{% endif %}
+      >
+        {%- for item in items -%}
+          <div
+            data-accordion-item
+            class="accordion-item bg-[var(--card)] border border-[var(--border)] rounded-2xl shadow-sm hover:shadow-md transition-all duration-300"
+            {% if item.settings.open_by_default %}data-open{% endif %}
+          >
+            <button
+              data-accordion-trigger
+              type="button"
+              class="flex items-center justify-between w-full px-5 py-4 text-left text-[var(--foreground)] font-medium group"
+              aria-expanded="{{ item.settings.open_by_default | default: false }}"
+            >
+              <span class="group-hover:text-[var(--primary)] transition-colors">{{ item.settings.title }}</span>
+              <div class="w-8 h-8 flex items-center justify-center rounded-lg bg-[var(--muted)] group-hover:bg-[var(--primary)]/10 transition-all duration-300">
+                <svg
+                  data-accordion-icon
+                  class="w-4 h-4 text-[var(--muted-foreground)] group-hover:text-[var(--primary)] transition-all duration-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </div>
+            </button>
+            <div
+              data-accordion-content
+              class="overflow-hidden transition-all duration-300 ease-out"
+              style="max-height: 0;"
+              aria-hidden="true"
+            >
+              <div class="px-5 pb-5 text-[var(--muted-foreground)] leading-relaxed">
+                {{ item.settings.content }}
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </accordion-island>
+
+    {%- when 'minimal' -%}
+      {%- comment -%} Minimal variant - no borders, subtle styling {%- endcomment -%}
+      <accordion-island
+        class="block"
+        {% if allow_multiple %}data-allow-multiple{% endif %}
+      >
+        {%- for item in items -%}
+          <div
+            data-accordion-item
+            class="accordion-item border-b border-[var(--border)] last:border-b-0"
+            {% if item.settings.open_by_default %}data-open{% endif %}
+          >
+            <button
+              data-accordion-trigger
+              type="button"
+              class="flex items-center justify-between w-full py-4 text-left text-[var(--foreground)] font-medium group"
+              aria-expanded="{{ item.settings.open_by_default | default: false }}"
+            >
+              <span class="group-hover:text-[var(--primary)] transition-colors">{{ item.settings.title }}</span>
+              <svg
+                data-accordion-icon
+                class="w-5 h-5 text-[var(--muted-foreground)] group-hover:text-[var(--primary)] transition-all duration-300"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12M6 12h12"/>
+              </svg>
+            </button>
+            <div
+              data-accordion-content
+              class="overflow-hidden transition-all duration-300 ease-out"
+              style="max-height: 0;"
+              aria-hidden="true"
+            >
+              <div class="pb-4 text-[var(--muted-foreground)] leading-relaxed">
+                {{ item.settings.content }}
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </accordion-island>
+
+    {%- else -%}
+      {%- comment -%} Default variant - connected items with glass styling {%- endcomment -%}
+      <accordion-island
+        class="block border border-[var(--border)] rounded-2xl overflow-hidden bg-[var(--card)] shadow-sm"
+        {% if allow_multiple %}data-allow-multiple{% endif %}
+      >
+        {%- for item in items -%}
+          <div
+            data-accordion-item
+            class="accordion-item {% unless forloop.last %}border-b border-[var(--border)]{% endunless %}"
+            {% if item.settings.open_by_default %}data-open{% endif %}
+          >
+            <button
+              data-accordion-trigger
+              type="button"
+              class="flex items-center justify-between w-full px-5 py-4 text-left text-[var(--foreground)] font-medium hover:bg-[var(--muted)]/50 transition-all duration-300 group"
+              aria-expanded="{{ item.settings.open_by_default | default: false }}"
+            >
+              <span class="group-hover:text-[var(--primary)] transition-colors">{{ item.settings.title }}</span>
+              <svg
+                data-accordion-icon
+                class="w-5 h-5 text-[var(--muted-foreground)] group-hover:text-[var(--primary)] transition-all duration-300"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+            <div
+              data-accordion-content
+              class="overflow-hidden transition-all duration-300 ease-out"
+              style="max-height: 0;"
+              aria-hidden="true"
+            >
+              <div class="px-5 pb-5 text-[var(--muted-foreground)] leading-relaxed">
+                {{ item.settings.content }}
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </accordion-island>
+  {%- endcase -%}
+</div>

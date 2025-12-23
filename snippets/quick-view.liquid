@@ -1,0 +1,225 @@
+{% doc %}
+  Renders a quick view modal for viewing product details without navigation.
+  Content is loaded dynamically via JavaScript. Hydrates when browser is idle.
+
+  @example
+  {% render 'quick-view' %}
+{% enddoc %}
+
+<div
+  data-island="quick-view"
+  data-hydrate="idle"
+>
+  <quick-view class="quick-view">
+    {%- comment -%} Modal backdrop {%- endcomment -%}
+    <div
+      class="quick-view__backdrop"
+      data-backdrop
+      aria-hidden="true"
+    ></div>
+
+    {%- comment -%} Modal container {%- endcomment -%}
+    <div
+      class="quick-view__modal"
+      data-modal
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+      aria-labelledby="quick-view-title"
+    >
+      {%- comment -%} Close button {%- endcomment -%}
+      <button
+        type="button"
+        class="quick-view__close"
+        data-close
+        aria-label="{{ 'accessibility.close_quick_view' | t }}"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+
+      {%- comment -%} Dynamic content area {%- endcomment -%}
+      <div class="quick-view__content" data-content>
+        {%- comment -%} Content is loaded dynamically via JavaScript {%- endcomment -%}
+      </div>
+    </div>
+  </quick-view>
+</div>
+
+<style>
+  .quick-view {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .quick-view__backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0);
+    transition: background-color 0.3s ease;
+    pointer-events: none;
+  }
+
+  .quick-view__modal {
+    position: relative;
+    width: 90%;
+    max-width: 900px;
+    max-height: 90vh;
+    background: var(--background);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+  }
+
+  .quick-view__modal.open {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+  }
+
+  .quick-view__modal.open ~ .quick-view__backdrop,
+  .quick-view__backdrop:has(+ .quick-view__modal.open),
+  .quick-view:has(.quick-view__modal.open) .quick-view__backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    pointer-events: auto;
+  }
+
+  .quick-view:has(.quick-view__modal.open) {
+    pointer-events: auto;
+  }
+
+  .quick-view__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .quick-view__close:hover {
+    background: var(--muted);
+    border-color: var(--border);
+  }
+
+  .quick-view__close:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--ring);
+  }
+
+  .quick-view__content {
+    padding: 2rem;
+    max-height: calc(90vh - 4rem);
+    overflow-y: auto;
+  }
+
+  .quick-view__loading,
+  .quick-view__error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    text-align: center;
+  }
+
+  .quick-view__spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--muted);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .quick-view__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  @media (min-width: 640px) {
+    .quick-view__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .quick-view__image {
+    aspect-ratio: 1 / 1;
+    background: var(--muted);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
+
+  .quick-view__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .quick-view__details {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .quick-view__option-button {
+    padding: 0.5rem 1rem;
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .quick-view__option-button:hover:not(:disabled) {
+    border-color: var(--foreground);
+  }
+
+  .quick-view__option-button.selected {
+    background: var(--foreground);
+    color: var(--background);
+    border-color: var(--foreground);
+  }
+
+  .quick-view__option-button.unavailable {
+    opacity: 0.5;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+
+  .quick-view__description {
+    margin-top: auto;
+  }
+
+  .line-clamp-4 {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

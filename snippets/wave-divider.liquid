@@ -1,0 +1,79 @@
+{% doc %}
+  Renders a decorative wave SVG divider between sections.
+  Creates a smooth coastal transition effect.
+
+  @param {string} [color] - CSS color value or variable (default: var(--sand))
+  @param {string} [direction] - 'down' or 'up' (default: 'down')
+  @param {string} [height] - CSS height value (default: '60px')
+  @param {boolean} [animate] - Enable wave undulation animation (default: false)
+  @param {string} [duration] - Animation duration (default: '12s')
+
+  @example
+  {% render 'wave-divider', color: 'var(--navy)', direction: 'down', animate: true %}
+{% enddoc %}
+
+{%- liquid
+  assign wave_color = color | default: 'var(--sand)'
+  assign wave_direction = direction | default: 'down'
+  assign wave_height = height | default: '60px'
+  assign wave_animate = animate | default: false
+  assign animation_duration = duration | default: '12s'
+-%}
+
+<div
+  class="wave-divider w-full overflow-hidden leading-none"
+  style="height: {{ wave_height }};"
+  aria-hidden="true"
+>
+  {%- if wave_direction == 'up' -%}
+    {%- comment -%} Wave pointing upward (for top of sections) {%- endcomment -%}
+    <svg
+      class="w-full h-full"
+      viewBox="0 0 1440 120"
+      preserveAspectRatio="none"
+      style="fill: {{ wave_color }};"
+    >
+      <path d="M0,120 L0,60 Q360,0 720,60 T1440,60 L1440,120 Z">
+        {%- if wave_animate -%}
+          <animate
+            attributeName="d"
+            dur="{{ animation_duration }}"
+            repeatCount="indefinite"
+            values="
+              M0,120 L0,60 Q360,0 720,60 T1440,60 L1440,120 Z;
+              M0,120 L0,60 Q360,120 720,60 T1440,60 L1440,120 Z;
+              M0,120 L0,60 Q360,0 720,60 T1440,60 L1440,120 Z
+            "
+            calcMode="spline"
+            keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
+          />
+        {%- endif -%}
+      </path>
+    </svg>
+  {%- else -%}
+    {%- comment -%} Wave pointing downward (for bottom of sections) {%- endcomment -%}
+    <svg
+      class="w-full h-full"
+      viewBox="0 0 1440 120"
+      preserveAspectRatio="none"
+      style="fill: {{ wave_color }};"
+    >
+      <path d="M0,0 L0,60 Q360,120 720,60 T1440,60 L1440,0 Z">
+        {%- if wave_animate -%}
+          <animate
+            attributeName="d"
+            dur="{{ animation_duration }}"
+            repeatCount="indefinite"
+            values="
+              M0,0 L0,60 Q360,120 720,60 T1440,60 L1440,0 Z;
+              M0,0 L0,60 Q360,0 720,60 T1440,60 L1440,0 Z;
+              M0,0 L0,60 Q360,120 720,60 T1440,60 L1440,0 Z
+            "
+            calcMode="spline"
+            keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
+          />
+        {%- endif -%}
+      </path>
+    </svg>
+  {%- endif -%}
+</div>

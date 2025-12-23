@@ -1,0 +1,100 @@
+{%- comment -%}
+  Island Architecture Demo Section
+
+  Demonstrates all hydration strategies:
+  - client:load - Hydrates immediately
+  - client:idle - Hydrates when browser is idle
+  - client:visible - Hydrates when scrolled into view
+{%- endcomment -%}
+
+<section class="island-demo py-12 md:py-16 bg-[var(--color-muted)]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-2xl sm:text-3xl font-bold text-[var(--color-foreground)] mb-4">
+        {{ section.settings.heading }}
+      </h2>
+      <p class="text-[var(--color-muted-foreground)] max-w-2xl mx-auto">
+        {{ section.settings.description }}
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 mb-12">
+      {%- comment -%} client:load - Loads immediately {%- endcomment -%}
+      {% render 'test-counter', initial_count: 0 %}
+
+      {%- comment -%} client:idle - Loads when browser is idle {%- endcomment -%}
+      {% render 'test-toast', auto_show: false %}
+    </div>
+
+    {%- comment -%} Spacer to demonstrate scroll-based loading {%- endcomment -%}
+    <div class="h-[50vh] flex items-center justify-center">
+      <div class="text-center">
+        <svg class="w-8 h-8 mx-auto text-[var(--color-muted-foreground)] animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+        </svg>
+        <p class="text-[var(--color-muted-foreground)] mt-2">Scroll down to see client:visible in action</p>
+      </div>
+    </div>
+
+    {%- comment -%} client:visible - Loads when scrolled into view {%- endcomment -%}
+    <div class="grid md:grid-cols-2 gap-6">
+      {% render 'test-reveal',
+        title: 'First Reveal',
+        description: 'This component loaded when you scrolled it into view.'
+      %}
+      {% render 'test-reveal',
+        title: 'Second Reveal',
+        description: 'Each island hydrates independently via IntersectionObserver.'
+      %}
+    </div>
+
+    {%- comment -%} Hydration status indicator {%- endcomment -%}
+    <div class="mt-12 p-6 bg-white rounded-xl border border-[var(--color-border)]">
+      <h3 class="font-bold text-[var(--color-foreground)] mb-4">Hydration Status</h3>
+      <div class="grid sm:grid-cols-3 gap-4 text-sm">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-green-500"></span>
+          <span><strong>client:load</strong> — Immediate</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+          <span><strong>client:idle</strong> — When idle</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-blue-500"></span>
+          <span><strong>client:visible</strong> — On scroll</span>
+        </div>
+      </div>
+      <p class="text-xs text-[var(--color-muted-foreground)] mt-4">
+        Open DevTools Console to see hydration logs. Each island logs when it hydrates.
+      </p>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Island Demo",
+  "tag": "section",
+  "class": "section-island-demo",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Island Architecture Demo"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "This section demonstrates the island architecture with different hydration strategies. Each island loads independently based on its strategy."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Island Demo"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,72 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+    {%- liquid
+      render 'vite-tag', entry: 'theme.css'
+      render 'vite-tag', entry: 'theme.ts'
+    -%}
+
+    {{ content_for_header }}
+
+    {%- comment -%} Preconnect to Shopify CDN {%- endcomment -%}
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+    {%- comment -%}
+      Font Strategy: Use system font stack for best performance.
+      Falls back to native fonts that look similar to Inter.
+      To use custom fonts, upload them to Settings > Files and reference via asset_url.
+    {%- endcomment -%}
+
+    {%- comment -%} Favicon {%- endcomment -%}
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    {%- comment -%} Canonical URL {%- endcomment -%}
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    <script>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+
+  <body class="template-{{ template.name }}{% if template.suffix %} template-{{ template.name }}-{{ template.suffix }}{% endif %}">
+    <a class="sr-only focus:not-sr-only" href="#main-content">
+      {{ 'accessibility.skip_to_content' | t }}
+    </a>
+
+    {%- sections 'header-group' -%}
+
+    <main id="main-content" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {%- sections 'footer-group' -%}
+
+    {%- comment -%} Global islands (available on all pages) {%- endcomment -%}
+    {%- comment -%} Cart drawer is rendered in sections/header.liquid {%- endcomment -%}
+    {% render 'quick-view' %}
+
+    {%- comment -%} Shopify Design Mode Detection {%- endcomment -%}
+    <script>
+      window.Shopify = window.Shopify || {};
+      window.Shopify.designMode = {{ request.design_mode | json }};
+    </script>
+  </body>
+</html>

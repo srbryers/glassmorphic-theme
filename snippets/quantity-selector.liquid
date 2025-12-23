@@ -1,0 +1,59 @@
+{% doc %}
+  Renders a quantity selector with increment/decrement buttons.
+  Hydrates when visible using island architecture.
+
+  @param {string} [name] - Input name attribute (default: 'quantity')
+  @param {number} [value] - Initial quantity value (default: 1)
+  @param {number} [min] - Minimum allowed value (default: 1)
+  @param {number} [max] - Maximum allowed value (default: unlimited)
+  @param {string} [id] - Input id attribute (default: same as name)
+
+  @example
+  {% render 'quantity-selector', name: 'quantity', value: 1, min: 1, max: 99 %}
+{% enddoc %}
+
+{%- liquid
+  assign input_name = name | default: 'quantity'
+  assign input_value = value | default: 1
+  assign input_min = min | default: 1
+  assign input_max = max | default: ''
+  assign input_id = id | default: input_name
+-%}
+
+<div
+  data-island="quantity-selector"
+  data-hydrate="visible"
+  {% if input_min %}data-min="{{ input_min }}"{% endif %}
+  {% if input_max %}data-max="{{ input_max }}"{% endif %}
+>
+  <quantity-selector class="quantity-selector inline-flex">
+    <button
+      type="button"
+      data-decrement
+      class="w-10 h-10 flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--muted)] transition-colors rounded-l-lg {% if input_value <= input_min %}opacity-50{% endif %}"
+      aria-label="{{ 'accessibility.decrease_quantity' | t }}"
+      {% if input_value <= input_min %}disabled{% endif %}
+    >
+      <span class="text-lg font-medium">−</span>
+    </button>
+    <input
+      type="number"
+      id="{{ input_id }}"
+      name="{{ input_name }}"
+      value="{{ input_value }}"
+      min="{{ input_min }}"
+      {% if input_max != '' %}max="{{ input_max }}"{% endif %}
+      class="w-12 h-10 text-center border-x border-[var(--border)] bg-transparent focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+      aria-label="{{ 'accessibility.quantity' | t }}"
+    >
+    <button
+      type="button"
+      data-increment
+      class="w-10 h-10 flex items-center justify-center text-[var(--foreground)] hover:bg-[var(--muted)] transition-colors rounded-r-lg {% if input_max != '' and input_value >= input_max %}opacity-50{% endif %}"
+      aria-label="{{ 'accessibility.increase_quantity' | t }}"
+      {% if input_max != '' and input_value >= input_max %}disabled{% endif %}
+    >
+      <span class="text-lg font-medium">+</span>
+    </button>
+  </quantity-selector>
+</div>

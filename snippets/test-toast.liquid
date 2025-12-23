@@ -1,0 +1,58 @@
+{% doc %}
+  Demo component: Toast notification to test client:idle hydration strategy.
+  Hydrates when browser is idle using requestIdleCallback.
+
+  @param {boolean} [auto_show] - Automatically show toast on hydration (default: false)
+
+  @example
+  {% render 'test-toast', auto_show: true %}
+{% enddoc %}
+
+{%- liquid
+  assign auto = auto_show | default: false
+-%}
+
+<div
+  data-island="test-toast"
+  data-hydrate="idle"
+>
+  <test-toast {% if auto %}data-auto-show="true"{% endif %} class="block p-6 bg-white rounded-xl border border-[var(--color-border)] shadow-sm">
+    <p class="text-sm font-medium text-[var(--color-muted-foreground)] mb-2">
+      Toast Notification (client:idle)
+    </p>
+
+    <button
+      data-show
+      class="px-4 py-2 bg-[var(--color-secondary)] text-white rounded-lg hover:opacity-90 transition-opacity text-sm font-medium"
+    >
+      Show Toast
+    </button>
+
+    <div
+      data-toast
+      class="fixed bottom-4 right-4 max-w-sm p-4 bg-[var(--color-secondary)] text-white rounded-xl shadow-lg opacity-0 translate-y-2 pointer-events-none transition-all duration-300 z-50"
+    >
+      <div class="flex items-start gap-3">
+        <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-green-500">
+          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+        <div class="flex-1">
+          <p class="font-medium">Island Hydrated!</p>
+          <p class="text-sm text-white/70">Toast loaded via client:idle</p>
+        </div>
+        <button data-close class="text-white/70 hover:text-white" aria-label="Close">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <p class="text-xs text-[var(--color-muted-foreground)] mt-3">
+      <span class="inline-block w-2 h-2 rounded-full bg-yellow-500 mr-1"></span>
+      Hydrates when browser is idle (requestIdleCallback)
+    </p>
+  </test-toast>
+</div>

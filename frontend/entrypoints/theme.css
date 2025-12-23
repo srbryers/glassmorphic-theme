@@ -1,0 +1,25 @@
+/**
+ * Beacon Basics Theme - Main Stylesheet
+ *
+ * Uses Tailwind CSS v4 with custom design tokens
+ * ported from the marketing website.
+ *
+ * Import order matters:
+ * 1. Font imports (must come first per CSS spec)
+ * 2. Tailwind base
+ * 3. Variables (CSS custom properties)
+ * 4. Base styles (reset, defaults)
+ * 5. Typography (fonts, text styles)
+ * 6. Component styles (buttons, forms)
+ * 7. Utilities (animations, helpers)
+ */
+
+@import "../styles/fonts.css";
+@import "tailwindcss";
+@import "../styles/variables.css";
+@import "../styles/base.css";
+@import "../styles/typography.css";
+@import "../styles/buttons.css";
+@import "../styles/forms.css";
+@import "../styles/animations.css";
+@import "../styles/utilities.css";

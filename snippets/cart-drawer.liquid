@@ -1,0 +1,112 @@
+{% doc %}
+  Renders a slide-out cart drawer with AJAX cart functionality.
+  Hydrates when browser is idle using island architecture.
+
+  @example
+  {% render 'cart-drawer' %}
+{% enddoc %}
+
+<div
+  data-island="cart-drawer"
+  data-hydrate="idle"
+>
+  <cart-drawer class="fixed inset-0 z-50 hidden" aria-labelledby="cart-drawer-title">
+    {%- comment -%} Overlay with backdrop blur {%- endcomment -%}
+    <div
+      data-overlay
+      class="fixed inset-0 bg-black/40 backdrop-blur-soft opacity-0 transition-opacity duration-300 hidden"
+    ></div>
+
+    {%- comment -%} Drawer panel {%- endcomment -%}
+    <div
+      data-drawer
+      class="fixed right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-xl transform translate-x-full transition-transform duration-300 flex flex-col"
+    >
+      {%- comment -%} Header {%- endcomment -%}
+      <div class="flex items-center justify-between px-6 py-4 border-b border-[var(--border)]">
+        <h2 id="cart-drawer-title" class="text-lg font-bold text-[var(--foreground)]">
+          {{ 'cart.title' | t }}
+          <span data-cart-count class="text-sm font-normal text-[var(--muted-foreground)]{% if cart.item_count == 0 %} hidden{% endif %}">
+            ({{ cart.item_count }})
+          </span>
+        </h2>
+        <button
+          data-close
+          class="btn-icon"
+          aria-label="{{ 'accessibility.close_cart' | t }}"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      {%- comment -%} Cart items {%- endcomment -%}
+      <div data-cart-items class="flex-1 overflow-y-auto px-6 py-4 scrollbar-visible bg-[var(--sand)]/30">
+        {%- if cart.item_count > 0 -%}
+          <div class="space-y-3">
+            {%- for item in cart.items -%}
+              <div class="flex gap-4 p-4 rounded-xl bg-white/70 backdrop-blur-sm border border-white/50 shadow-sm">
+                <a href="{{ item.url }}" class="flex-shrink-0 w-20 h-20 bg-[var(--muted)] rounded-lg overflow-hidden">
+                  <img
+                    src="{{ item.image | image_url: width: 160 }}"
+                    alt="{{ item.title }}"
+                    class="w-full h-full object-cover"
+                    width="160"
+                    height="160"
+                    loading="lazy"
+                  >
+                </a>
+                <div class="flex-1 min-w-0">
+                  <a href="{{ item.url }}" class="font-medium text-[var(--foreground)] hover:text-[var(--primary)] line-clamp-2">
+                    {{ item.product.title }}
+                  </a>
+                  {%- unless item.variant.title == 'Default Title' -%}
+                    <p class="text-sm text-[var(--muted-foreground)]">{{ item.variant.title }}</p>
+                  {%- endunless -%}
+                  <div class="flex items-center gap-3 mt-2">
+                    <div class="quantity-selector">
+                      <button data-decrement data-key="{{ item.key }}" data-quantity="{{ item.quantity }}" aria-label="{{ 'accessibility.decrease_quantity' | t }}">−</button>
+                      <span class="w-8 text-center">{{ item.quantity }}</span>
+                      <button data-increment data-key="{{ item.key }}" data-quantity="{{ item.quantity }}" aria-label="{{ 'accessibility.increase_quantity' | t }}">+</button>
+                    </div>
+                    <span class="price">{{ item.final_line_price | money }}</span>
+                  </div>
+                </div>
+                <button data-remove data-key="{{ item.key }}" class="self-start p-1 text-[var(--muted-foreground)] hover:text-[var(--destructive)]" aria-label="{{ 'cart.remove_item' | t }}">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                  </svg>
+                </button>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Empty state {%- endcomment -%}
+      <div
+        data-empty-state
+        class="flex-1 flex flex-col items-center justify-center px-6 text-center{% if cart.item_count > 0 %} hidden{% endif %}"
+      >
+        <svg class="w-16 h-16 text-[var(--muted-foreground)] mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+        </svg>
+        <p class="text-lg font-medium text-[var(--foreground)] mb-2">{{ 'cart.empty' | t }}</p>
+        <p class="text-[var(--muted-foreground)] mb-6">{{ 'cart.empty_description' | t }}</p>
+        <a href="{{ routes.all_products_collection_url }}" class="btn-primary" data-close>{{ 'cart.continue_shopping' | t }}</a>
+      </div>
+
+      {%- comment -%} Footer with subtle glass effect {%- endcomment -%}
+      <div class="px-6 py-4 border-t border-white/20 bg-white/50 backdrop-blur-md{% if cart.item_count == 0 %} hidden{% endif %}">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-[var(--foreground)]">{{ 'cart.subtotal' | t }}</span>
+          <span data-cart-total class="text-lg font-bold text-[var(--foreground)]">{{ cart.total_price | money }}</span>
+        </div>
+        <p class="text-sm text-[var(--muted-foreground)] mb-4">{{ 'cart.shipping_at_checkout' | t }}</p>
+        <a href="/checkout" class="btn-primary w-full text-center">{{ 'cart.checkout' | t }}</a>
+        <a href="{{ routes.cart_url }}" class="btn-ghost w-full text-center mt-2">{{ 'cart.view_cart' | t }}</a>
+      </div>
+    </div>
+  </cart-drawer>
+</div>

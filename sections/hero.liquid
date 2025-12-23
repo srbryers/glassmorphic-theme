@@ -1,0 +1,88 @@
+{%- comment -%}
+  Hero Section
+
+  A full-width hero section for the homepage with gradient background.
+  Features optional lighthouse beam effect for coastal brand identity.
+{%- endcomment -%}
+
+<section class="hero py-20 md:py-32 relative overflow-hidden">
+  {%- comment -%} Gradient background {%- endcomment -%}
+  <div class="absolute inset-0 bg-gradient-to-br from-[var(--muted)] via-white to-[var(--muted)]"></div>
+  <div class="absolute inset-0 bg-gradient-to-tr from-[var(--primary)]/5 via-transparent to-[var(--accent)]/5"></div>
+
+  {%- comment -%} Lighthouse beam effect {%- endcomment -%}
+  {%- if section.settings.show_lighthouse_beam -%}
+    <div class="lighthouse-beam" aria-hidden="true"></div>
+  {%- endif -%}
+
+  {%- comment -%} Decorative blur orbs {%- endcomment -%}
+  <div class="absolute top-0 left-1/4 w-96 h-96 bg-[var(--primary)]/10 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-[var(--accent)]/10 rounded-full blur-3xl"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[var(--foreground)] mb-6 tracking-tight">
+      {{ section.settings.heading }}
+    </h1>
+    {%- if section.settings.subheading != blank -%}
+      <p class="text-lg md:text-xl text-[var(--muted-foreground)] max-w-2xl mx-auto mb-10">
+        {{ section.settings.subheading }}
+      </p>
+    {%- endif -%}
+    {%- if section.settings.button_label != blank -%}
+      <a
+        href="{{ section.settings.button_link }}"
+        class="btn-primary btn-lg"
+      >
+        {{ section.settings.button_label }}
+        <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "tag": "section",
+  "class": "section-hero",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_lighthouse_beam",
+      "label": "Show lighthouse beam effect",
+      "default": true,
+      "info": "Subtle animated light beam for coastal brand identity"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Beacon Basics"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Quality basics for everyday"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop the Heavyweight Tee"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero"
+    }
+  ]
+}
+{% endschema %}

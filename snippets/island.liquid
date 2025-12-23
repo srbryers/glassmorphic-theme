@@ -1,0 +1,27 @@
+{% doc %}
+  Renders an island wrapper for a Web Component with hydration strategy.
+  Islands are interactive components that hydrate independently based on strategy.
+
+  @param {string} name - Component name (maps to frontend/islands/[name].ts)
+  @param {string} [hydrate] - Hydration strategy: 'load' | 'idle' | 'visible' | 'media' (default: 'visible')
+  @param {string} [media] - Media query for 'media' hydration strategy
+  @param {string} content - The HTML content to wrap
+
+  @example
+  {% capture island_content %}
+    <header-nav>...</header-nav>
+  {% endcapture %}
+  {% render 'island', name: 'header-nav', hydrate: 'load', content: island_content %}
+{% enddoc %}
+
+{%- liquid
+  assign hydrate_strategy = hydrate | default: 'visible'
+-%}
+
+<div
+  data-island="{{ name }}"
+  data-hydrate="{{ hydrate_strategy }}"
+  {%- if media %} data-media="{{ media }}"{% endif %}
+>
+  {{ content }}
+</div>

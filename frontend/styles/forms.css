@@ -1,0 +1,378 @@
+/**
+ * Form Styles - Ported from Marketing Website
+ *
+ * Input, select, textarea, and form control styles
+ * matching the Attribute design system.
+ * Features enhanced focus glow and hover states.
+ * Uses direct CSS properties (Tailwind v4 compatible).
+ */
+
+@layer components {
+  /* Base input styles */
+  .input {
+    display: flex;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-size: 1rem;
+    border: 1px solid var(--input);
+    border-radius: var(--radius-lg);
+    transition: all 0.3s ease;
+  }
+
+  .input::placeholder {
+    color: var(--muted-foreground);
+  }
+
+  .input:hover:not(:disabled):not(:focus) {
+    border-color: var(--muted-foreground);
+    background-color: var(--muted);
+  }
+
+  .input:focus-visible {
+    outline: none;
+    border-color: var(--primary);
+    background-color: var(--background);
+    box-shadow:
+      0 0 0 3px rgba(252, 74, 63, 0.1),
+      0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .input:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .input::file-selector-button {
+    border: 0;
+    background: transparent;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--foreground);
+  }
+
+  /* Input with success state */
+  .input-success {
+    display: flex;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-size: 1rem;
+    border: 1px solid var(--success);
+    border-radius: var(--radius-lg);
+    transition: all 0.3s ease;
+  }
+
+  .input-success:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 3px rgba(34, 197, 94, 0.1),
+      0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  /* Input with error state */
+  .input-error {
+    display: flex;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-size: 1rem;
+    border: 1px solid var(--destructive);
+    border-radius: var(--radius-lg);
+    transition: all 0.3s ease;
+  }
+
+  .input-error:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 3px rgba(239, 68, 68, 0.1),
+      0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  /* Textarea */
+  .textarea {
+    display: flex;
+    width: 100%;
+    min-height: 120px;
+    padding: 0.75rem 1rem;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-size: 1rem;
+    border: 1px solid var(--input);
+    border-radius: var(--radius-lg);
+    resize: vertical;
+    transition: all 0.3s ease;
+  }
+
+  .textarea::placeholder {
+    color: var(--muted-foreground);
+  }
+
+  .textarea:hover:not(:disabled):not(:focus) {
+    border-color: var(--muted-foreground);
+    background-color: var(--muted);
+  }
+
+  .textarea:focus-visible {
+    outline: none;
+    border-color: var(--primary);
+    background-color: var(--background);
+    box-shadow:
+      0 0 0 3px rgba(252, 74, 63, 0.1),
+      0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .textarea:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /* Select */
+  .select {
+    display: flex;
+    width: 100%;
+    padding: 0.75rem 2.5rem 0.75rem 1rem;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-size: 1rem;
+    border: 1px solid var(--input);
+    border-radius: var(--radius-lg);
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236B6B6B' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1.25rem 1.25rem;
+    transition: all 0.3s ease;
+  }
+
+  .select:hover:not(:disabled):not(:focus) {
+    border-color: var(--muted-foreground);
+    background-color: var(--muted);
+  }
+
+  .select:focus-visible {
+    outline: none;
+    border-color: var(--primary);
+    background-color: var(--background);
+    box-shadow:
+      0 0 0 3px rgba(252, 74, 63, 0.1),
+      0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .select:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /* Checkbox */
+  .checkbox {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--input);
+    transition: all 0.2s ease;
+    accent-color: var(--primary);
+    cursor: pointer;
+  }
+
+  .checkbox:hover:not(:disabled) {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(252, 74, 63, 0.1);
+  }
+
+  .checkbox:focus-visible {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(252, 74, 63, 0.15);
+  }
+
+  .checkbox:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+  }
+
+  .checkbox:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /* Radio button */
+  .radio {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    border: 1px solid var(--input);
+    transition: all 0.2s ease;
+    accent-color: var(--primary);
+    cursor: pointer;
+  }
+
+  .radio:hover:not(:disabled) {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(252, 74, 63, 0.1);
+  }
+
+  .radio:focus-visible {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(252, 74, 63, 0.15);
+  }
+
+  .radio:checked {
+    border-color: var(--primary);
+  }
+
+  .radio:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /* Label */
+  .label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--foreground);
+    line-height: 1;
+  }
+
+  /* Form field wrapper */
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* Helper text */
+  .form-helper {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  /* Error text */
+  .form-error {
+    font-size: 0.875rem;
+    color: var(--destructive);
+  }
+
+  /* Quantity selector */
+  .quantity-selector {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background-color: var(--background);
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-xs);
+  }
+
+  .quantity-selector:hover {
+    border-color: var(--muted-foreground);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .quantity-selector:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(252, 74, 63, 0.1);
+  }
+
+  .quantity-selector button {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--foreground);
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border-radius: inherit;
+  }
+
+  .quantity-selector button:first-child {
+    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+  }
+
+  .quantity-selector button:last-child {
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  }
+
+  .quantity-selector button:hover:not(:disabled) {
+    background-color: var(--muted);
+    color: var(--primary);
+  }
+
+  .quantity-selector button:active:not(:disabled) {
+    background-color: var(--primary);
+    color: white;
+    transform: scale(0.95);
+  }
+
+  .quantity-selector button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .quantity-selector input {
+    width: 3rem;
+    height: 2.5rem;
+    text-align: center;
+    border: 0;
+    background: transparent;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--foreground);
+    -moz-appearance: textfield;
+  }
+
+  .quantity-selector input:focus {
+    outline: none;
+  }
+
+  .quantity-selector input::-webkit-outer-spin-button,
+  .quantity-selector input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Quantity selector - compact variant */
+  .quantity-selector-sm {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background-color: var(--background);
+    transition: all 0.3s ease;
+  }
+
+  .quantity-selector-sm button {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+  }
+
+  .quantity-selector-sm button:hover:not(:disabled) {
+    color: var(--primary);
+    background-color: var(--muted);
+  }
+
+  .quantity-selector-sm input {
+    width: 2.5rem;
+    height: 2rem;
+    text-align: center;
+    border: 0;
+    background: transparent;
+    font-size: 0.875rem;
+    font-weight: 600;
+    -moz-appearance: textfield;
+  }
+}

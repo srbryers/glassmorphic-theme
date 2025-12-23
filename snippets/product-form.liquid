@@ -1,0 +1,140 @@
+{% doc %}
+  Renders a product form with variant selection, quantity, and add-to-cart.
+  Hydrates when visible using island architecture.
+
+  @param {product} product - The product object
+
+  @example
+  {% render 'product-form', product: product %}
+{% enddoc %}
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+-%}
+
+<div
+  data-island="product-form"
+  data-hydrate="visible"
+>
+  <product-form class="block">
+    <form action="{{ routes.cart_add_url }}" method="post">
+      {%- comment -%} Product JSON for JavaScript {%- endcomment -%}
+      <script data-product-json type="application/json">
+        {
+          "id": {{ product.id }},
+          "title": {{ product.title | json }},
+          "variants": [
+            {%- for variant in product.variants -%}
+              {
+                "id": {{ variant.id }},
+                "title": {{ variant.title | json }},
+                "price": {{ variant.price }},
+                "compare_at_price": {{ variant.compare_at_price | default: 'null' }},
+                "available": {{ variant.available }},
+                "options": {{ variant.options | json }}
+                {%- if variant.featured_image -%}
+                  ,"featured_image": {
+                    "src": "{{ variant.featured_image | image_url: width: 800 }}",
+                    "alt": {{ variant.featured_image.alt | default: product.title | json }}
+                  }
+                {%- endif -%}
+              }{% unless forloop.last %},{% endunless %}
+            {%- endfor -%}
+          ],
+          "options": {{ product.options_with_values | json }}
+        }
+      </script>
+
+      {%- comment -%} Variant selector with enhanced styling {%- endcomment -%}
+      {%- unless product.has_only_default_variant -%}
+        {%- for option in product.options_with_values -%}
+          <div class="form-field mb-5">
+            <label class="label mb-3 block">
+              <span class="font-heading text-base uppercase tracking-wide text-[var(--foreground)]">{{ option.name }}</span>
+              <span class="text-[var(--muted-foreground)] font-normal ml-2 text-sm">{{ option.selected_value }}</span>
+            </label>
+            <div class="flex flex-wrap gap-2">
+              {%- for value in option.values -%}
+                {%- assign option_index = forloop.parentloop.index0 -%}
+                <label class="relative cursor-pointer group">
+                  <input
+                    type="radio"
+                    name="option-{{ option.name | handleize }}"
+                    value="{{ value }}"
+                    data-option-input
+                    data-option-index="{{ option_index }}"
+                    class="sr-only peer"
+                    {% if option.selected_value == value %}checked{% endif %}
+                  >
+                  <span class="inline-flex items-center justify-center min-w-[2.75rem] h-11 px-4 bg-[var(--background)] border border-[var(--accent)]/30 rounded-xl text-sm font-medium shadow-xs transition-all duration-300 peer-checked:border-[var(--primary)] peer-checked:bg-[var(--primary)] peer-checked:text-white peer-checked:shadow-primary-sm peer-checked:scale-[1.02] peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--primary)]/20 peer-focus-visible:ring-offset-2 group-hover:border-[var(--accent)] group-hover:bg-[var(--accent)]/5 group-hover:shadow-sm group-hover:scale-[1.02]">
+                    {{ value }}
+                  </span>
+                </label>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endfor -%}
+
+        {%- comment -%} Hidden variant select for form submission {%- endcomment -%}
+        <select name="id" data-variant-select class="hidden">
+          {%- for variant in product.variants -%}
+            <option
+              value="{{ variant.id }}"
+              {% if variant == current_variant %}selected{% endif %}
+              {% unless variant.available %}disabled{% endunless %}
+            >
+              {{ variant.title }} - {{ variant.price | money }}
+            </option>
+          {%- endfor -%}
+        </select>
+      {%- else -%}
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+      {%- endunless -%}
+
+      {%- comment -%} Quantity selector {%- endcomment -%}
+      <div class="form-field mb-6">
+        <label class="label mb-2 block font-heading text-base uppercase tracking-wide">{{ 'products.quantity' | t }}</label>
+        <div class="quantity-selector w-fit">
+          <button type="button" data-quantity-decrement aria-label="{{ 'accessibility.decrease_quantity' | t }}">−</button>
+          <input
+            type="number"
+            name="quantity"
+            value="1"
+            min="1"
+            data-quantity-input
+            aria-label="{{ 'accessibility.quantity' | t }}"
+          >
+          <button type="button" data-quantity-increment aria-label="{{ 'accessibility.increase_quantity' | t }}">+</button>
+        </div>
+      </div>
+
+      {%- comment -%} Price {%- endcomment -%}
+      <div class="flex items-baseline gap-3 mb-6">
+        <span data-price class="text-2xl font-bold text-[var(--foreground)] {% if current_variant.compare_at_price > current_variant.price %}price-sale{% endif %}">
+          {{ current_variant.price | money }}
+        </span>
+        {%- if current_variant.compare_at_price > current_variant.price -%}
+          <span data-compare-price class="text-lg price-compare">
+            {{ current_variant.compare_at_price | money }}
+          </span>
+        {%- else -%}
+          <span data-compare-price class="text-lg price-compare hidden"></span>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Add to cart button {%- endcomment -%}
+      <button
+        type="submit"
+        data-add-button
+        class="btn-primary w-full"
+        {% unless current_variant.available %}disabled{% endunless %}
+      >
+        {%- if current_variant.available -%}
+          {{ 'products.add_to_cart' | t }}
+        {%- else -%}
+          {{ 'products.sold_out' | t }}
+        {%- endif -%}
+      </button>
+    </form>
+  </product-form>
+</div>

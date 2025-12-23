@@ -1,0 +1,19 @@
+{
+  "sections": {
+    "design-system": {
+      "type": "design-system",
+      "settings": {
+        "heading": "Design System",
+        "description": "A comprehensive design system featuring consistent colors, typography, and components."
+      }
+    },
+    "island-demo": {
+      "type": "island-demo",
+      "settings": {
+        "heading": "Island Architecture Demo",
+        "description": "This section demonstrates the island architecture with different hydration strategies. Each island loads independently based on its strategy."
+      }
+    }
+  },
+  "order": ["design-system", "island-demo"]
+}

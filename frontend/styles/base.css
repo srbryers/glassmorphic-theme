@@ -1,0 +1,138 @@
+/**
+ * Base Styles - Reset & Defaults
+ *
+ * Modern CSS reset with sensible defaults
+ * matching the Attribute design system.
+ */
+
+@layer base {
+  /* Box sizing */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  /* Default border and outline colors */
+  * {
+    border-color: var(--border);
+  }
+
+  *:focus-visible {
+    outline-color: var(--ring);
+  }
+
+  /* Root element */
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  /* Body */
+  body {
+    font-family: var(--font-sans);
+    color: var(--foreground);
+    background-color: var(--background);
+    line-height: 1.6;
+    min-height: 100vh;
+    margin: 0;
+  }
+
+  /* Focus styles for accessibility */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  /* Remove default button styles */
+  button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /* Links */
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Images */
+  img,
+  picture,
+  video,
+  canvas,
+  svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Form elements inherit font */
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
+  }
+
+  /* Table defaults */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  /* Remove list styles by default */
+  ul[role="list"],
+  ol[role="list"] {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Selection color */
+  ::selection {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  /* Placeholder color */
+  ::placeholder {
+    color: var(--muted-foreground);
+    opacity: 1;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Print styles */
+  @media print {
+    body {
+      background: white;
+      color: black;
+    }
+  }
+}

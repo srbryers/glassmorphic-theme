@@ -1,0 +1,97 @@
+{
+  "_island-cart-drawer-BXBOsEp0.js": {
+    "file": "island-cart-drawer-BXBOsEp0.js",
+    "name": "island-cart-drawer",
+    "isDynamicEntry": true
+  },
+  "frontend/entrypoints/theme.css": {
+    "file": "theme-DLB8NWUY.css",
+    "src": "frontend/entrypoints/theme.css",
+    "isEntry": true
+  },
+  "frontend/entrypoints/theme.ts": {
+    "file": "theme-DpSKxo-t.js",
+    "name": "theme",
+    "src": "frontend/entrypoints/theme.ts",
+    "isEntry": true,
+    "dynamicImports": [
+      "frontend/islands/accordion.ts",
+      "_island-cart-drawer-BXBOsEp0.js",
+      "frontend/islands/header-nav.ts",
+      "frontend/islands/image-gallery.ts",
+      "frontend/islands/modal.ts",
+      "frontend/islands/product-form.ts",
+      "frontend/islands/quantity-selector.ts",
+      "frontend/islands/quick-view.ts",
+      "frontend/islands/test-counter.ts",
+      "frontend/islands/test-reveal.ts",
+      "frontend/islands/test-toast.ts"
+    ]
+  },
+  "frontend/islands/accordion.ts": {
+    "file": "island-accordion-BGZeoPkd.js",
+    "name": "island-accordion",
+    "src": "frontend/islands/accordion.ts",
+    "isDynamicEntry": true
+  },
+  "frontend/islands/header-nav.ts": {
+    "file": "island-header-nav-Wl2UukpZ.js",
+    "name": "island-header-nav",
+    "src": "frontend/islands/header-nav.ts",
+    "isDynamicEntry": true
+  },
+  "frontend/islands/image-gallery.ts": {
+    "file": "island-image-gallery-DPCs2U38.js",
+    "name": "island-image-gallery",
+    "src": "frontend/islands/image-gallery.ts",
+    "isDynamicEntry": true
+  },
+  "frontend/islands/modal.ts": {
+    "file": "island-modal-DZKGSdNi.js",
+    "name": "island-modal",
+    "src": "frontend/islands/modal.ts",
+    "isDynamicEntry": true
+  },
+  "frontend/islands/product-form.ts": {
+    "file": "island-product-form-B29hsXmz.js",
+    "name": "island-product-form",
+    "src": "frontend/islands/product-form.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_island-cart-drawer-BXBOsEp0.js"
+    ]
+  },
+  "frontend/islands/quantity-selector.ts": {
+    "file": "island-quantity-selector-Df-u8xVO.js",
+    "name": "island-quantity-selector",
+    "src": "frontend/islands/quantity-selector.ts",
+    "isDynamicEntry": true
+  },
+  "frontend/islands/quick-view.ts": {
+    "file": "island-quick-view-lW93RFO8.js",
+    "name": "island-quick-view",
+    "src": "frontend/islands/quick-view.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "_island-cart-drawer-BXBOsEp0.js"
+    ]
+  },
+  "frontend/islands/test-counter.ts": {
+    "file": "island-test-counter-iJMqeeKp.js",
+    "name": "island-test-counter",
+    "src": "frontend/islands/test-counter.ts",
+    "isDynamicEntry": true
+  },
+  "frontend/islands/test-reveal.ts": {
+    "file": "island-test-reveal-B_K9gQYY.js",
+    "name": "island-test-reveal",
+    "src": "frontend/islands/test-reveal.ts",
+    "isDynamicEntry": true
+  },
+  "frontend/islands/test-toast.ts": {
+    "file": "island-test-toast-Bw_aBDOb.js",
+    "name": "island-test-toast",
+    "src": "frontend/islands/test-toast.ts",
+    "isDynamicEntry": true
+  }
+}

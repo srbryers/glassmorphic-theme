@@ -1,0 +1,197 @@
+{% doc %}
+  Renders responsive header navigation with mobile menu toggle.
+  Hydrates immediately using island architecture for critical interactivity.
+
+  @param {image} [logo_image] - Logo image object
+  @param {number} [logo_width] - Logo width in pixels (default: 120)
+  @param {boolean} [show_store_name] - Whether to show store name (default: true)
+  @param {linklist} [menu] - Navigation menu (default: linklists.main-menu)
+
+  @example
+  {% render 'header-nav', logo_image: section.settings.logo, logo_width: 120, show_store_name: true, menu: section.settings.menu %}
+{% enddoc %}
+
+{%- liquid
+  assign main_menu = menu | default: linklists.main-menu
+  assign logo_width_value = logo_width | default: 120
+  assign show_name = show_store_name | default: false
+-%}
+
+<div
+  data-island="header-nav"
+  data-hydrate="load"
+>
+  <header-nav class="block sticky top-0 z-40 transition-all duration-300" data-header>
+    <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8 glass shadow-sm">
+      {%- comment -%} Logo {%- endcomment -%}
+      <a href="{{ routes.root_url }}" class="flex-shrink-0 flex items-center gap-3">
+        {%- if logo_image -%}
+          <img
+            src="{{ logo_image | image_url: width: logo_width_value | times: 2 }}"
+            alt="{{ shop.name }}"
+            width="{{ logo_width_value }}"
+            height="{{ logo_width_value | divided_by: logo_image.aspect_ratio }}"
+            class="h-auto"
+            style="width: {{ logo_width_value }}px;"
+            loading="eager"
+          >
+        {%- else -%}
+          {%- comment -%} Default: Lighthouse Patch logo {%- endcomment -%}
+          <img
+            src="{{ 'Lighthouse - Patch.png' | asset_url }}"
+            alt="{{ shop.name }}"
+            class="h-10 w-auto object-contain"
+            loading="eager"
+          >
+        {%- endif -%}
+        {%- if show_name -%}
+          <span class="font-heading text-xl font-bold text-[var(--foreground)]">
+            {{ shop.name }}
+          </span>
+        {%- endif -%}
+      </a>
+
+      {%- comment -%} Desktop Navigation {%- endcomment -%}
+      <nav class="hidden md:flex items-center gap-8" aria-label="Main navigation">
+        {%- for link in main_menu.links -%}
+          {%- if link.links.size > 0 -%}
+            <div class="relative group">
+              <button
+                data-dropdown-trigger
+                class="flex items-center gap-1 text-sm font-medium text-[var(--foreground)] hover:text-[var(--primary)] transition-colors"
+                aria-expanded="false"
+              >
+                {{ link.title }}
+                <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              <div
+                data-dropdown
+                class="hidden absolute top-full left-0 mt-2 w-48 glass rounded-xl shadow-glass-lg py-2 opacity-0 transition-all duration-200 translate-y-1 group-hover:translate-y-0"
+                aria-hidden="true"
+              >
+                {%- for child_link in link.links -%}
+                  <a
+                    href="{{ child_link.url }}"
+                    class="block px-4 py-2 text-sm text-[var(--foreground)] hover:bg-[var(--muted)] hover:text-[var(--primary)]"
+                  >
+                    {{ child_link.title }}
+                  </a>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- else -%}
+            <a
+              href="{{ link.url }}"
+              class="text-sm font-medium text-[var(--foreground)] hover:text-[var(--primary)] transition-colors"
+            >
+              {{ link.title }}
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </nav>
+
+      {%- comment -%} Right side actions {%- endcomment -%}
+      <div class="flex items-center gap-4">
+        {%- comment -%} Search {%- endcomment -%}
+        <a href="{{ routes.search_url }}" class="btn-icon hidden sm:flex" aria-label="{{ 'accessibility.search' | t }}">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </a>
+
+        {%- comment -%} Account {%- endcomment -%}
+        <a href="{{ routes.account_url }}" class="btn-icon hidden sm:flex" aria-label="{{ 'accessibility.account' | t }}">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+          </svg>
+        </a>
+
+        {%- comment -%} Cart {%- endcomment -%}
+        <button data-cart-trigger class="btn-icon relative" aria-label="{{ 'accessibility.open_cart' | t }}">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+          </svg>
+          <span
+            data-cart-count
+            class="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center bg-[var(--primary)] text-white text-xs font-bold rounded-full{% if cart.item_count == 0 %} hidden{% endif %}"
+          >
+            {{ cart.item_count }}
+          </span>
+        </button>
+
+        {%- comment -%} Mobile menu toggle {%- endcomment -%}
+        <button
+          data-menu-toggle
+          class="btn-icon md:hidden"
+          aria-label="{{ 'accessibility.open_menu' | t }}"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    {%- comment -%} Mobile Menu with glass effect {%- endcomment -%}
+    <div
+      id="mobile-menu"
+      data-mobile-menu
+      class="hidden fixed inset-0 top-16 glass z-50 md:hidden"
+      aria-hidden="true"
+    >
+      <nav class="px-4 py-6 space-y-4" aria-label="Mobile navigation">
+        {%- for link in main_menu.links -%}
+          {%- if link.links.size > 0 -%}
+            <div data-accordion-item>
+              <button
+                data-dropdown-trigger
+                class="flex items-center justify-between w-full py-2 text-lg font-medium text-[var(--foreground)]"
+              >
+                {{ link.title }}
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+              <div data-dropdown class="hidden pl-4 space-y-2 pb-2">
+                {%- for child_link in link.links -%}
+                  <a
+                    href="{{ child_link.url }}"
+                    class="block py-2 text-[var(--muted-foreground)] hover:text-[var(--primary)]"
+                  >
+                    {{ child_link.title }}
+                  </a>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- else -%}
+            <a
+              href="{{ link.url }}"
+              class="block py-2 text-lg font-medium text-[var(--foreground)] hover:text-[var(--primary)]"
+            >
+              {{ link.title }}
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+
+        <div class="border-t border-[var(--border)] pt-4 mt-4 space-y-4">
+          <a href="{{ routes.search_url }}" class="flex items-center gap-3 py-2 text-[var(--foreground)]">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            {{ 'general.search' | t }}
+          </a>
+          <a href="{{ routes.account_url }}" class="flex items-center gap-3 py-2 text-[var(--foreground)]">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+            {{ 'customer.account' | t }}
+          </a>
+        </div>
+      </nav>
+    </div>
+  </header-nav>
+</div>

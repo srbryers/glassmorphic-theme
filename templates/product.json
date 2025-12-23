@@ -1,0 +1,32 @@
+{
+  "sections": {
+    "main-product": {
+      "type": "main-product",
+      "blocks": {
+        "accordion-shipping": {
+          "type": "accordion",
+          "settings": {
+            "title": "Shipping & Returns",
+            "content": "<p>Free shipping on orders over $50. Returns accepted within 30 days of purchase.</p>"
+          }
+        },
+        "accordion-care": {
+          "type": "accordion",
+          "settings": {
+            "title": "Care Instructions",
+            "content": "<p>Machine wash cold with like colors. Tumble dry low. Do not bleach.</p>"
+          }
+        }
+      },
+      "block_order": ["accordion-shipping", "accordion-care"],
+      "settings": {}
+    },
+    "related-products": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "You May Also Like"
+      }
+    }
+  },
+  "order": ["main-product", "related-products"]
+}

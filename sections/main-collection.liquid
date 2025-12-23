@@ -1,0 +1,174 @@
+{%- comment -%}
+  Main Collection Section
+
+  Collection page with product grid, filtering, and sorting.
+  Features enhanced toolbar and pagination styling.
+{%- endcomment -%}
+
+{%- liquid
+  assign products_per_page = section.settings.products_per_page | default: 12
+  assign columns = section.settings.columns | default: 4
+-%}
+
+<section class="section py-8 md:py-12">
+  <div class="container">
+    {%- comment -%} Collection Header with gradient accent {%- endcomment -%}
+    <div class="mb-8 md:mb-10">
+      <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--foreground)] mb-4">
+        {{ collection.title }}
+      </h1>
+      {%- if collection.description != blank -%}
+        <div class="text-[var(--muted-foreground)] max-w-2xl leading-relaxed">
+          {{ collection.description }}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Toolbar with glass card styling {%- endcomment -%}
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 p-4 bg-[var(--muted)]/50 rounded-2xl">
+      <p class="text-sm text-[var(--muted-foreground)]">
+        <span class="font-semibold text-[var(--foreground)]">{{ collection.products_count }}</span>
+        {{ collection.products_count | pluralize: 'product', 'products' }}
+      </p>
+
+      {%- comment -%} Sort dropdown {%- endcomment -%}
+      <div class="flex items-center gap-3">
+        <label for="sort-by" class="text-sm text-[var(--muted-foreground)]">{{ 'collections.sort_by' | t | default: 'Sort by' }}:</label>
+        <select
+          id="sort-by"
+          class="select py-2.5 px-4 text-sm bg-[var(--background)] shadow-sm"
+          onchange="window.location.href = this.value"
+        >
+          {%- assign current_sort = collection.sort_by | default: collection.default_sort_by -%}
+          {%- for option in collection.sort_options -%}
+            <option
+              value="{{ option.url }}"
+              {% if option.value == current_sort %}selected{% endif %}
+            >
+              {{ option.name }}
+            </option>
+          {%- endfor -%}
+        </select>
+      </div>
+    </div>
+
+    {%- comment -%} Product Grid {%- endcomment -%}
+    {%- paginate collection.products by products_per_page -%}
+      {%- if collection.products.size > 0 -%}
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-{{ columns }} gap-4 md:gap-6">
+          {%- for product in collection.products -%}
+            {% render 'product-card',
+              product: product,
+              show_vendor: section.settings.show_vendor,
+              show_quick_add: section.settings.show_quick_add
+            %}
+          {%- endfor -%}
+        </div>
+
+        {%- comment -%} Pagination with enhanced styling {%- endcomment -%}
+        {%- if paginate.pages > 1 -%}
+          <nav class="flex items-center justify-center gap-1.5 mt-12" aria-label="Pagination">
+            {%- if paginate.previous -%}
+              <a
+                href="{{ paginate.previous.url }}"
+                class="w-10 h-10 flex items-center justify-center rounded-xl bg-[var(--background)] border border-[var(--border)] text-[var(--muted-foreground)] hover:border-[var(--primary)] hover:text-[var(--primary)] hover:shadow-sm transition-all duration-300"
+                aria-label="{{ 'pagination.previous' | t | default: 'Previous page' }}"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+              </a>
+            {%- endif -%}
+
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}
+                <a
+                  href="{{ part.url }}"
+                  class="w-10 h-10 flex items-center justify-center rounded-xl text-sm font-medium text-[var(--muted-foreground)] hover:bg-[var(--muted)] hover:text-[var(--foreground)] transition-all duration-300"
+                >
+                  {{ part.title }}
+                </a>
+              {%- else -%}
+                {%- if part.title == paginate.current_page -%}
+                  <span class="w-10 h-10 flex items-center justify-center rounded-xl text-sm font-bold bg-[var(--primary)] text-white shadow-primary-sm">
+                    {{ part.title }}
+                  </span>
+                {%- else -%}
+                  <span class="w-10 h-10 flex items-center justify-center text-sm text-[var(--muted-foreground)]">
+                    {{ part.title }}
+                  </span>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+
+            {%- if paginate.next -%}
+              <a
+                href="{{ paginate.next.url }}"
+                class="w-10 h-10 flex items-center justify-center rounded-xl bg-[var(--background)] border border-[var(--border)] text-[var(--muted-foreground)] hover:border-[var(--primary)] hover:text-[var(--primary)] hover:shadow-sm transition-all duration-300"
+                aria-label="{{ 'pagination.next' | t | default: 'Next page' }}"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </a>
+            {%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- else -%}
+        {%- comment -%} Empty state with glass card {%- endcomment -%}
+        <div class="text-center py-16 md:py-24">
+          <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-[var(--muted)] mb-6">
+            <svg class="w-10 h-10 text-[var(--muted-foreground)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+            </svg>
+          </div>
+          <h2 class="text-xl font-bold text-[var(--foreground)] mb-2">{{ 'collections.empty' | t | default: 'No products found' }}</h2>
+          <p class="text-[var(--muted-foreground)] mb-8 max-w-md mx-auto">{{ 'collections.empty_description' | t | default: 'This collection is empty.' }}</p>
+          <a href="{{ routes.all_products_collection_url }}" class="btn-primary">
+            {{ 'collections.browse_all' | t | default: 'Browse All Products' }}
+          </a>
+        </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection",
+  "tag": "section",
+  "class": "section-main-collection",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 4,
+      "max": 24,
+      "step": 4,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns (desktop)",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "label": "Show quick add button",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

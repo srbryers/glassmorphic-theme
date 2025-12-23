@@ -1,0 +1,41 @@
+{% doc %}
+  Demo component: Animated reveal to test client:visible hydration strategy.
+  Hydrates when scrolled into view using IntersectionObserver.
+
+  @param {string} [title] - Reveal title text (default: 'Revealed!')
+  @param {string} [description] - Reveal description text
+
+  @example
+  {% render 'test-reveal', title: 'Hello', description: 'Content loaded on scroll!' %}
+{% enddoc %}
+
+{%- liquid
+  assign title_text = title | default: 'Revealed!'
+  assign desc_text = description | default: 'This content loaded when you scrolled here.'
+-%}
+
+<div
+  data-island="test-reveal"
+  data-hydrate="visible"
+>
+  <test-reveal class="block p-6 bg-gradient-to-br from-[var(--color-primary)] to-[#FF6B5B] rounded-xl shadow-lg text-white">
+    <div
+      data-content
+      class="opacity-0 translate-y-8 transition-all duration-700 ease-out"
+    >
+      <div class="flex items-center gap-2 mb-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+        </svg>
+        <span class="text-sm font-medium text-white/80">Visible (client:visible)</span>
+      </div>
+      <h3 class="text-2xl font-bold mb-2">{{ title_text }}</h3>
+      <p class="text-white/80">{{ desc_text }}</p>
+      <p class="text-xs text-white/60 mt-4">
+        <span class="inline-block w-2 h-2 rounded-full bg-white/60 mr-1"></span>
+        Hydrated via IntersectionObserver when scrolled into view
+      </p>
+    </div>
+  </test-reveal>
+</div>
