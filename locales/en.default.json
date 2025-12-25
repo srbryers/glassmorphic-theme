@@ -49,7 +49,13 @@
     "from": "From",
     "from_price": "From {{ price }}",
     "description": "Description",
-    "reviews": "reviews"
+    "reviews": "reviews",
+    "stock": {
+      "in_stock": "{{ count }} in stock",
+      "low_stock": "Only {{ count }} left",
+      "out_of_stock": "Out of stock",
+      "backorder": "Available for backorder"
+    }
   },
   "cart": {
     "title": "Your cart",

@@ -18,6 +18,8 @@ interface Variant {
   compare_at_price: number | null
   available: boolean
   options: string[]
+  inventory_quantity: number
+  inventory_policy: string
   featured_image?: {
     src: string
     alt: string
@@ -220,6 +222,37 @@ class ProductForm extends HTMLElement {
       input.checked = isSelected
       input.closest('label')?.classList.toggle('selected', isSelected)
     })
+
+    // Update stock display
+    this.updateStockDisplay()
+  }
+
+  private updateStockDisplay(): void {
+    const stockEl = this.querySelector('[data-stock-display]') as HTMLElement | null
+    if (!stockEl || !this.currentVariant) return
+
+    const style = stockEl.dataset.style || 'count'
+    const threshold = parseInt(stockEl.dataset.threshold || '5', 10)
+    const inventory = this.currentVariant.inventory_quantity || 0
+    const available = this.currentVariant.available
+    const allowsBackorder = this.currentVariant.inventory_policy === 'continue'
+
+    let html = ''
+    if (available) {
+      if (inventory <= 0 && allowsBackorder) {
+        html = `<span class="stock-level--backorder">Available for backorder</span>`
+      } else if (style === 'count') {
+        if (inventory <= threshold) {
+          html = `<span class="stock-level--low">Only ${inventory} left</span>`
+        } else {
+          html = `<span class="stock-level--in-stock">${inventory} in stock</span>`
+        }
+      } else if (inventory <= threshold) {
+        html = `<span class="stock-level--low">Only ${inventory} left</span>`
+      }
+    }
+
+    stockEl.innerHTML = html
   }
 
   private updateURL() {

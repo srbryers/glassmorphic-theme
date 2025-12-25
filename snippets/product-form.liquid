@@ -3,6 +3,9 @@
   Hydrates when visible using island architecture.
 
   @param {product} product - The product object
+  @param {boolean} [show_stock_level] - Whether to show stock levels
+  @param {string} [stock_display_style] - Display style: 'count' or 'low_only'
+  @param {number} [low_stock_threshold] - Threshold for low stock warning
 
   @example
   {% render 'product-form', product: product %}
@@ -31,7 +34,9 @@
                 "price": {{ variant.price }},
                 "compare_at_price": {{ variant.compare_at_price | default: 'null' }},
                 "available": {{ variant.available }},
-                "options": {{ variant.options | json }}
+                "options": {{ variant.options | json }},
+                "inventory_quantity": {{ variant.inventory_quantity | default: 0 }},
+                "inventory_policy": {{ variant.inventory_policy | json }}
                 {%- if variant.featured_image -%}
                   ,"featured_image": {
                     "src": "{{ variant.featured_image | image_url: width: 800 }}",
@@ -109,7 +114,7 @@
       </div>
 
       {%- comment -%} Price {%- endcomment -%}
-      <div class="flex items-baseline gap-3 mb-6">
+      <div class="flex items-baseline gap-3 mb-4">
         <span data-price class="text-2xl font-bold text-[var(--foreground)] {% if current_variant.compare_at_price > current_variant.price %}price-sale{% endif %}">
           {{ current_variant.price | money }}
         </span>
@@ -121,6 +126,40 @@
           <span data-compare-price class="text-lg price-compare hidden"></span>
         {%- endif -%}
       </div>
+
+      {%- comment -%} Stock Level {%- endcomment -%}
+      {%- if show_stock_level -%}
+        {%- liquid
+          assign inventory = current_variant.inventory_quantity
+          assign threshold = low_stock_threshold | default: 5
+          assign allows_backorder = false
+          if current_variant.inventory_policy == 'continue'
+            assign allows_backorder = true
+          endif
+        -%}
+        <div
+          class="stock-level mb-6"
+          data-stock-display
+          data-style="{{ stock_display_style | default: 'count' }}"
+          data-threshold="{{ threshold }}"
+        >
+          {%- if current_variant.available -%}
+            {%- if inventory <= 0 and allows_backorder -%}
+              <span class="stock-level--backorder">{{ 'products.stock.backorder' | t }}</span>
+            {%- elsif stock_display_style == 'count' or stock_display_style == blank -%}
+              {%- if inventory <= threshold -%}
+                <span class="stock-level--low">{{ 'products.stock.low_stock' | t: count: inventory }}</span>
+              {%- else -%}
+                <span class="stock-level--in-stock">{{ 'products.stock.in_stock' | t: count: inventory }}</span>
+              {%- endif -%}
+            {%- elsif inventory <= threshold -%}
+              <span class="stock-level--low">{{ 'products.stock.low_stock' | t: count: inventory }}</span>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+      {%- else -%}
+        <div class="mb-6"></div>
+      {%- endif -%}
 
       {%- comment -%} Add to cart button {%- endcomment -%}
       <button
@@ -138,3 +177,23 @@
     </form>
   </product-form>
 </div>
+
+{% stylesheet %}
+.stock-level {
+  font-size: 0.875rem;
+}
+
+.stock-level--in-stock {
+  color: var(--muted-foreground);
+}
+
+.stock-level--low {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.stock-level--backorder {
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+{% endstylesheet %}

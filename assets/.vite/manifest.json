@@ -10,7 +10,7 @@
     "isEntry": true
   },
   "frontend/entrypoints/theme.ts": {
-    "file": "theme-DpSKxo-t.js",
+    "file": "theme-DMgPsJr1.js",
     "name": "theme",
     "src": "frontend/entrypoints/theme.ts",
     "isEntry": true,
@@ -53,7 +53,7 @@
     "isDynamicEntry": true
   },
   "frontend/islands/product-form.ts": {
-    "file": "island-product-form-B29hsXmz.js",
+    "file": "island-product-form-DTSqw6WQ.js",
     "name": "island-product-form",
     "src": "frontend/islands/product-form.ts",
     "isDynamicEntry": true,

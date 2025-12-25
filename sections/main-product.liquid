@@ -63,7 +63,12 @@
           </div>
 
           {%- comment -%} Product Form {%- endcomment -%}
-          {% render 'product-form', product: product %}
+          {% render 'product-form',
+            product: product,
+            show_stock_level: section.settings.show_stock_level,
+            stock_display_style: section.settings.stock_display_style,
+            low_stock_threshold: section.settings.low_stock_threshold
+          %}
         </div>
 
         {%- comment -%} Description Accordion with card variant styling {%- endcomment -%}
@@ -144,6 +149,37 @@
   "name": "Product",
   "tag": "section",
   "class": "section-main-product",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Inventory"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stock_level",
+      "label": "Show stock level",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "stock_display_style",
+      "label": "Display style",
+      "options": [
+        { "value": "count", "label": "Always show count" },
+        { "value": "low_only", "label": "Only show when low stock" }
+      ],
+      "default": "count",
+      "visible_if": "{{ section.settings.show_stock_level }}"
+    },
+    {
+      "type": "number",
+      "id": "low_stock_threshold",
+      "label": "Low stock threshold",
+      "default": 5,
+      "info": "Show warning when stock falls to or below this number",
+      "visible_if": "{{ section.settings.show_stock_level }}"
+    }
+  ],
   "blocks": [
     {
       "type": "accordion",
