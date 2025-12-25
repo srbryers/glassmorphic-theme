@@ -5,7 +5,10 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [
-    shopify(),
+    shopify({
+      // Use Cloudflare tunnel for HTTPS - required for theme customizer
+      tunnel: true
+    }),
     tailwindcss()
   ],
   resolve: {

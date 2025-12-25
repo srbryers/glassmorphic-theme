@@ -1,0 +1,177 @@
+{%- liquid
+  assign icon = block.settings.icon
+
+  case block.settings.color
+    when 'primary'
+      assign color_value = 'var(--primary)'
+    when 'foreground'
+      assign color_value = 'var(--foreground)'
+    when 'muted'
+      assign color_value = 'var(--muted-foreground)'
+    when 'accent'
+      assign color_value = 'var(--accent)'
+    when 'white'
+      assign color_value = 'white'
+    when 'black'
+      assign color_value = 'black'
+    when 'custom'
+      assign color_value = block.settings.custom_color
+    else
+      assign color_value = 'currentColor'
+  endcase
+-%}
+
+<div
+  class="block-icon {% if block.settings.background %}block-icon--with-bg{% endif %}"
+  style="
+    --icon-size: {{ block.settings.size }}px;
+    --icon-color: {{ color_value }};
+    {% if block.settings.background %}--icon-bg: {{ block.settings.background_color }};{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  {%- case icon -%}
+    {%- when 'check' -%}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    {%- when 'arrow-right' -%}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+    {%- when 'heart' -%}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+    {%- when 'star' -%}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+    {%- when 'shipping' -%}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+    {%- when 'returns' -%}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+    {%- when 'quality' -%}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+    {%- when 'shield' -%}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+    {%- when 'clock' -%}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+    {%- when 'sustainable' -%}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="M12 6v6l4 2"></path></svg>
+    {%- else -%}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
+  {%- endcase -%}
+</div>
+
+{% stylesheet %}
+.block-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--icon-size, 24px);
+  height: var(--icon-size, 24px);
+  color: var(--icon-color, currentColor);
+  flex-shrink: 0;
+}
+
+.block-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.block-icon--with-bg {
+  padding: calc(var(--icon-size, 24px) * 0.4);
+  width: auto;
+  height: auto;
+  border-radius: 50%;
+  background-color: var(--icon-bg, rgba(var(--primary-rgb), 0.1));
+}
+
+.block-icon--with-bg svg {
+  width: var(--icon-size, 24px);
+  height: var(--icon-size, 24px);
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Icon",
+  "tag": "div",
+  "class": "block-icon-wrapper",
+  "settings": [
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "Icon",
+      "options": [
+        { "value": "check", "label": "Check" },
+        { "value": "arrow-right", "label": "Arrow right" },
+        { "value": "heart", "label": "Heart" },
+        { "value": "star", "label": "Star" },
+        { "value": "shipping", "label": "Shipping" },
+        { "value": "returns", "label": "Returns" },
+        { "value": "quality", "label": "Quality" },
+        { "value": "shield", "label": "Shield" },
+        { "value": "clock", "label": "Clock" },
+        { "value": "sustainable", "label": "Sustainable" }
+      ],
+      "default": "check"
+    },
+    {
+      "type": "range",
+      "id": "size",
+      "label": "Size",
+      "min": 16,
+      "max": 96,
+      "step": 4,
+      "default": 24,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "color",
+      "label": "Color",
+      "options": [
+        { "value": "primary", "label": "Primary" },
+        { "value": "foreground", "label": "Foreground" },
+        { "value": "muted", "label": "Muted" },
+        { "value": "accent", "label": "Accent" },
+        { "value": "white", "label": "White" },
+        { "value": "black", "label": "Black" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "primary"
+    },
+    {
+      "type": "color",
+      "id": "custom_color",
+      "label": "Custom color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.color == 'custom' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "background",
+      "label": "Show background",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#C1272D1A",
+      "info": "Only visible when background is enabled"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Icon",
+      "settings": {
+        "icon": "check",
+        "size": 24
+      }
+    },
+    {
+      "name": "Icon with background",
+      "settings": {
+        "icon": "shipping",
+        "size": 32,
+        "background": true
+      }
+    }
+  ]
+}
+{% endschema %}

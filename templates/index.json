@@ -1,25 +1,113 @@
-{
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
   "sections": {
     "hero": {
       "type": "hero",
+      "blocks": {
+        "group_dgRctT": {
+          "type": "group",
+          "name": "Column",
+          "settings": {
+            "direction": "vertical",
+            "gap": 16,
+            "padding": 0,
+            "alignment": "end",
+            "justify": "end",
+            "background_color": "",
+            "border_radius": 0,
+            "max_width": "none"
+          },
+          "blocks": {
+            "heading_qPXkXf": {
+              "type": "heading",
+              "name": "Hero heading",
+              "settings": {
+                "text": "Just a great white tee.",
+                "heading_tag": "h1",
+                "size": "3xl",
+                "color": "default",
+                "custom_color": "#000000",
+                "alignment": "right",
+                "font_style": "heading",
+                "max_width": 100
+              },
+              "blocks": {}
+            },
+            "rich_text_H8zJet": {
+              "type": "rich-text",
+              "name": "Body text",
+              "settings": {
+                "text": "<p>No, really, that's it.</p>",
+                "size": "base",
+                "color": "muted",
+                "custom_color": "#000000",
+                "alignment": "left",
+                "max_width": "none"
+              },
+              "blocks": {}
+            },
+            "button_group_Rmfaxi": {
+              "type": "button-group",
+              "name": "Button group",
+              "settings": {
+                "direction": "horizontal",
+                "gap": 12,
+                "alignment": "center"
+              },
+              "blocks": {
+                "button_qtKVrQ": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Get yours",
+                    "link": "shopify://products/heavyweight-t-shirt",
+                    "style": "primary",
+                    "size": "md",
+                    "show_arrow": true,
+                    "full_width": false,
+                    "open_in_new_tab": false
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "button_qtKVrQ"
+              ]
+            }
+          },
+          "block_order": [
+            "heading_qPXkXf",
+            "rich_text_H8zJet",
+            "button_group_Rmfaxi"
+          ]
+        }
+      },
+      "block_order": [
+        "group_dgRctT"
+      ],
+      "custom_css": [
+        "section {margin-top: -72px;}"
+      ],
       "settings": {
+        "background_type": "image",
+        "background_image": "shopify://shop_images/Male_-_Lifestyle_-_NE_Coast_Left.png",
+        "background_video_url": "",
+        "overlay_opacity": 35,
         "show_lighthouse_beam": true,
-        "heading": "Beacon Basics",
-        "subheading": "Quality basics for everyday",
-        "button_label": "Shop the Heavyweight Tee",
-        "button_link": "shopify://products/heavyweight-t-shirt"
+        "content_position_vertical": "middle",
+        "content_position_horizontal": "center",
+        "text_alignment": "center"
       }
     },
     "product-spotlight": {
       "type": "product-spotlight",
-      "settings": {
-        "product": "heavyweight-t-shirt",
-        "eyebrow": "Featured Product",
-        "heading": "The Heavyweight Tee",
-        "description": "Our signature piece, crafted from premium heavyweight cotton for lasting comfort and durability. This is the only t-shirt you'll ever need.",
-        "button_text": "Shop Now",
-        "background_color": "#F5F1EB"
-      },
       "blocks": {
         "feature-1": {
           "type": "feature",
@@ -46,13 +134,24 @@
           }
         }
       },
-      "block_order": ["feature-1", "feature-2", "feature-3", "feature-4"]
+      "block_order": [
+        "feature-1",
+        "feature-2",
+        "feature-3",
+        "feature-4"
+      ],
+      "settings": {
+        "product": "heavyweight-t-shirt",
+        "eyebrow": "Introducing",
+        "heading": "The Heavyweight Tee",
+        "description": "Our signature piece, crafted from premium heavyweight cotton for lasting comfort and durability. This is the only t-shirt you'll ever need.",
+        "button_text": "Shop Now",
+        "button_link": "",
+        "background_color": "#f5f1eb"
+      }
     },
     "value-props": {
       "type": "value-props",
-      "settings": {
-        "background_color": "#FFFFFF"
-      },
       "blocks": {
         "prop-1": {
           "type": "value_prop",
@@ -81,23 +180,34 @@
         "prop-4": {
           "type": "value_prop",
           "settings": {
-            "icon": "sustainable",
-            "heading": "Made Responsibly",
-            "description": "Ethically sourced materials"
+            "icon": "heart",
+            "heading": "Ultimate Comfort",
+            "description": "Made to the Comfort Colors standard."
           }
         }
       },
-      "block_order": ["prop-1", "prop-2", "prop-3", "prop-4"]
+      "block_order": [
+        "prop-1",
+        "prop-2",
+        "prop-3",
+        "prop-4"
+      ],
+      "settings": {
+        "heading": "",
+        "background_color": "#ffffff"
+      }
     },
     "brand-story": {
       "type": "brand-story",
       "settings": {
+        "image": "shopify://shop_images/Female_-_Lifestyle_-_Forest.png",
         "image_position": "right",
         "subheading": "Our Story",
         "heading": "Built on Basics",
         "text": "<p>Founded on the belief that basics should be anything but basic. We craft each piece with intention, using premium materials that feel as good as they look.</p><p>From our coastal New England roots, we bring you timeless essentials designed to be worn, washed, and loved for years to come.</p>",
-        "button_text": "Learn More",
-        "background_color": "#F5F1EB"
+        "button_text": "Get the tee",
+        "button_link": "shopify://products/heavyweight-t-shirt",
+        "background_color": "#f5f1eb"
       }
     },
     "newsletter": {
@@ -108,9 +218,15 @@
         "placeholder": "Enter your email",
         "button_text": "Subscribe",
         "disclaimer": "We respect your privacy. Unsubscribe at any time.",
-        "background_color": "#1B3A4B"
+        "background_color": "#1b3a4b"
       }
     }
   },
-  "order": ["hero", "product-spotlight", "value-props", "brand-story", "newsletter"]
+  "order": [
+    "hero",
+    "product-spotlight",
+    "value-props",
+    "brand-story",
+    "newsletter"
+  ]
 }

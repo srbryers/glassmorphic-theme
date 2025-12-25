@@ -1,0 +1,129 @@
+{%- liquid
+  assign style = block.settings.style
+  assign size = block.settings.size
+
+  case style
+    when 'secondary'
+      assign btn_class = 'btn-secondary'
+    when 'outline'
+      assign btn_class = 'btn-outline'
+    when 'ghost'
+      assign btn_class = 'btn-ghost'
+    when 'link'
+      assign btn_class = 'btn-link'
+    else
+      assign btn_class = 'btn-primary'
+  endcase
+
+  case size
+    when 'sm'
+      assign size_class = 'btn-sm'
+    when 'lg'
+      assign size_class = 'btn-lg'
+    else
+      assign size_class = ''
+  endcase
+-%}
+
+{%- if block.settings.label != blank -%}
+  <a
+    href="{{ block.settings.link | default: '#' }}"
+    class="block-button {{ btn_class }} {{ size_class }} inline-flex items-center gap-2 {% if block.settings.full_width %}w-full justify-center{% endif %}"
+    {% if block.settings.open_in_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}
+    {{ block.shopify_attributes }}
+  >
+    {{- block.settings.label -}}
+    {%- if block.settings.show_arrow -%}
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    {%- endif -%}
+  </a>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Button",
+  "tag": "div",
+  "class": "block-button-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        { "value": "primary", "label": "Primary" },
+        { "value": "secondary", "label": "Secondary" },
+        { "value": "outline", "label": "Outline" },
+        { "value": "ghost", "label": "Ghost" },
+        { "value": "link", "label": "Link" }
+      ],
+      "default": "primary"
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Size",
+      "options": [
+        { "value": "sm", "label": "Small" },
+        { "value": "md", "label": "Medium" },
+        { "value": "lg", "label": "Large" }
+      ],
+      "default": "md"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrow",
+      "label": "Show arrow",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "open_in_new_tab",
+      "label": "Open in new tab",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Primary CTA",
+      "settings": {
+        "style": "primary",
+        "size": "lg",
+        "show_arrow": true
+      }
+    },
+    {
+      "name": "Secondary CTA",
+      "settings": {
+        "style": "secondary",
+        "size": "md"
+      }
+    },
+    {
+      "name": "Text link",
+      "settings": {
+        "style": "link",
+        "size": "md"
+      }
+    }
+  ]
+}
+{% endschema %}

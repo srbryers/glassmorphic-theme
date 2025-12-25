@@ -46,6 +46,7 @@
     "unavailable": "Unavailable",
     "quantity": "Quantity",
     "price": "Price",
+    "from": "From",
     "from_price": "From {{ price }}",
     "description": "Description",
     "reviews": "reviews"
@@ -76,7 +77,8 @@
     "empty": "No products found",
     "empty_description": "This collection is empty.",
     "browse_all": "Browse All Products",
-    "sort_by": "Sort by"
+    "sort_by": "Sort by",
+    "products_count": "products"
   },
   "pagination": {
     "previous": "Previous page",

@@ -1,0 +1,121 @@
+{%- liquid
+  assign product = block.settings.product
+
+  case block.settings.size
+    when 'sm'
+      assign size_class = 'text-sm'
+    when 'lg'
+      assign size_class = 'text-xl md:text-2xl'
+    when 'xl'
+      assign size_class = 'text-2xl md:text-3xl'
+    else
+      assign size_class = 'text-base md:text-lg'
+  endcase
+-%}
+
+{%- if product != blank -%}
+  <div
+    class="block-price {{ size_class }}"
+    style="text-align: {{ block.settings.alignment }};"
+    {{ block.shopify_attributes }}
+  >
+    {%- if product.compare_at_price > product.price and block.settings.show_compare -%}
+      <span class="block-price__sale">{{ product.price | money }}</span>
+      <span class="block-price__compare">{{ product.compare_at_price | money }}</span>
+    {%- else -%}
+      <span class="block-price__regular">{{ product.price | money }}</span>
+    {%- endif -%}
+
+    {%- if product.price_varies -%}
+      <span class="block-price__from">{{ 'products.from' | t }}</span>
+    {%- endif -%}
+  </div>
+{%- else -%}
+  <div
+    class="block-price block-price--placeholder {{ size_class }}"
+    style="text-align: {{ block.settings.alignment }};"
+    {{ block.shopify_attributes }}
+  >
+    <span class="block-price__regular">{{ 0 | money }}</span>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+.block-price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.block-price__regular {
+  color: var(--foreground);
+}
+
+.block-price__sale {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.block-price__compare {
+  color: var(--muted-foreground);
+  text-decoration: line-through;
+  font-size: 0.875em;
+}
+
+.block-price__from {
+  color: var(--muted-foreground);
+  font-size: 0.875em;
+  font-weight: 400;
+}
+
+.block-price--placeholder {
+  opacity: 0.5;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Price",
+  "tag": "div",
+  "class": "block-price-wrapper",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Size",
+      "options": [
+        { "value": "sm", "label": "Small" },
+        { "value": "md", "label": "Medium" },
+        { "value": "lg", "label": "Large" },
+        { "value": "xl", "label": "Extra large" }
+      ],
+      "default": "md"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_compare",
+      "label": "Show compare-at price",
+      "default": true
+    },
+    {
+      "type": "text_alignment",
+      "id": "alignment",
+      "label": "Alignment",
+      "default": "left"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Price",
+      "settings": {}
+    }
+  ]
+}
+{% endschema %}

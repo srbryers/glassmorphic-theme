@@ -5,12 +5,18 @@
   Uses header-nav island for interactivity.
 {%- endcomment -%}
 
-<header class="header sticky top-0 z-40 bg-white border-b border-[var(--border)] transition-shadow duration-200">
+<header class="header sticky top-0 z-40 transition-shadow duration-200">
   {% render 'header-nav',
     logo_image: section.settings.logo,
     logo_width: section.settings.logo_width,
     show_store_name: section.settings.show_store_name,
-    menu: section.settings.menu
+    menu: section.settings.menu,
+    background_style: section.settings.background_style,
+    background_color: section.settings.background_color,
+    text_color: section.settings.text_color,
+    custom_text_color: section.settings.custom_text_color,
+    show_search: section.settings.show_search,
+    show_account: section.settings.show_account
   %}
 </header>
 
@@ -53,6 +59,65 @@
       "label": "Show store name",
       "default": false,
       "info": "Display store name next to logo (or alone if no logo)"
+    },
+    {
+      "type": "header",
+      "content": "Icons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search icon",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account",
+      "label": "Show account icon",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background style",
+      "options": [
+        { "value": "transparent", "label": "Transparent" },
+        { "value": "glass", "label": "Glass" },
+        { "value": "solid", "label": "Solid" },
+        { "value": "custom", "label": "Custom color" }
+      ],
+      "default": "glass"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.background_style == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "text_color",
+      "label": "Text color",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "white", "label": "White" },
+        { "value": "black", "label": "Black" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "default",
+      "info": "Use white or light colors with transparent backgrounds over dark images"
+    },
+    {
+      "type": "color",
+      "id": "custom_text_color",
+      "label": "Custom text color",
+      "default": "#000000",
+      "visible_if": "{{ section.settings.text_color == 'custom' }}"
     }
   ]
 }

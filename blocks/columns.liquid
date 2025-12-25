@@ -1,0 +1,125 @@
+{%- liquid
+  assign columns_desktop = block.settings.columns_desktop
+  assign columns_mobile = block.settings.columns_mobile
+
+  case block.settings.vertical_alignment
+    when 'top'
+      assign align_items = 'start'
+    when 'bottom'
+      assign align_items = 'end'
+    when 'stretch'
+      assign align_items = 'stretch'
+    else
+      assign align_items = 'center'
+  endcase
+-%}
+
+<div
+  class="block-columns"
+  style="
+    --columns-mobile: {{ columns_mobile }};
+    --columns-desktop: {{ columns_desktop }};
+    --columns-gap: {{ block.settings.gap }}px;
+    --columns-align: {{ align_items }};
+  "
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</div>
+
+{% stylesheet %}
+.block-columns {
+  display: grid;
+  grid-template-columns: repeat(var(--columns-mobile, 1), 1fr);
+  gap: var(--columns-gap, 24px);
+  align-items: var(--columns-align, center);
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .block-columns {
+    grid-template-columns: repeat(var(--columns-desktop, 2), 1fr);
+  }
+}
+
+.block-columns:empty {
+  display: none;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Columns",
+  "tag": "div",
+  "class": "block-columns-wrapper",
+  "settings": [
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Columns (desktop)",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns (mobile)",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "default": 24,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "vertical_alignment",
+      "label": "Vertical alignment",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" },
+        { "value": "stretch", "label": "Stretch" }
+      ],
+      "default": "center"
+    }
+  ],
+  "blocks": [{ "type": "@theme" }],
+  "presets": [
+    {
+      "name": "2 Columns",
+      "settings": {
+        "columns_desktop": "2",
+        "columns_mobile": "1"
+      }
+    },
+    {
+      "name": "3 Columns",
+      "settings": {
+        "columns_desktop": "3",
+        "columns_mobile": "1"
+      }
+    },
+    {
+      "name": "4 Columns",
+      "settings": {
+        "columns_desktop": "4",
+        "columns_mobile": "2"
+      }
+    }
+  ]
+}
+{% endschema %}

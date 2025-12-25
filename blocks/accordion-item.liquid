@@ -1,0 +1,113 @@
+<details
+  class="block-accordion-item"
+  {% if block.settings.open_by_default %}open{% endif %}
+  {{ block.shopify_attributes }}
+>
+  <summary class="block-accordion-item__trigger">
+    <span class="block-accordion-item__title">{{ block.settings.title }}</span>
+    <svg class="block-accordion-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </summary>
+  <div class="block-accordion-item__content">
+    {%- if block.settings.content != blank -%}
+      <div class="block-accordion-item__text">
+        {{ block.settings.content }}
+      </div>
+    {%- endif -%}
+    {% content_for 'blocks' %}
+  </div>
+</details>
+
+{% stylesheet %}
+.block-accordion-item {
+  border-bottom: 1px solid var(--border);
+}
+
+.block-accordion-item__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem 0;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.block-accordion-item__trigger::-webkit-details-marker {
+  display: none;
+}
+
+.block-accordion-item__title {
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.block-accordion-item__icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--muted-foreground);
+  transition: transform 0.2s ease;
+}
+
+.block-accordion-item[open] .block-accordion-item__icon {
+  transform: rotate(180deg);
+}
+
+.block-accordion-item__content {
+  padding-bottom: 1rem;
+}
+
+.block-accordion-item__text {
+  color: var(--muted-foreground);
+  line-height: 1.6;
+}
+
+.block-accordion-item__text p {
+  margin: 0 0 0.5em;
+}
+
+.block-accordion-item__text p:last-child {
+  margin-bottom: 0;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Accordion item",
+  "tag": "div",
+  "class": "block-accordion-item-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Accordion item"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "default": "<p>Add your content here. You can also add nested blocks for more complex layouts.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_by_default",
+      "label": "Open by default",
+      "default": false
+    }
+  ],
+  "blocks": [{ "type": "@theme" }],
+  "presets": [
+    {
+      "name": "Accordion item",
+      "settings": {
+        "title": "Accordion item"
+      }
+    }
+  ]
+}
+{% endschema %}

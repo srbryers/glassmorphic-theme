@@ -1,0 +1,127 @@
+{%- liquid
+  assign direction = block.settings.direction
+
+  case direction
+    when 'vertical'
+      assign flex_direction = 'column'
+    when 'responsive'
+      assign flex_direction = 'column'
+    else
+      assign flex_direction = 'row'
+  endcase
+
+  case block.settings.alignment
+    when 'start'
+      assign justify_content = 'flex-start'
+    when 'end'
+      assign justify_content = 'flex-end'
+    else
+      assign justify_content = 'center'
+  endcase
+-%}
+
+<div
+  class="block-button-group {% if direction == 'responsive' %}block-button-group--responsive{% endif %}"
+  style="
+    --button-group-direction: {{ flex_direction }};
+    --button-group-gap: {{ block.settings.gap }}px;
+    --button-group-justify: {{ justify_content }};
+  "
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</div>
+
+{% stylesheet %}
+.block-button-group {
+  display: flex;
+  flex-direction: var(--button-group-direction, row);
+  gap: var(--button-group-gap, 12px);
+  justify-content: var(--button-group-justify, center);
+  flex-wrap: wrap;
+}
+
+.block-button-group--responsive {
+  flex-direction: column;
+}
+
+@media (min-width: 640px) {
+  .block-button-group--responsive {
+    flex-direction: row;
+  }
+}
+
+.block-button-group:empty {
+  display: none;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Button group",
+  "tag": "div",
+  "class": "block-button-group-wrapper",
+  "settings": [
+    {
+      "type": "select",
+      "id": "direction",
+      "label": "Direction",
+      "options": [
+        { "value": "horizontal", "label": "Horizontal" },
+        { "value": "vertical", "label": "Vertical" },
+        { "value": "responsive", "label": "Responsive (stack on mobile)" }
+      ],
+      "default": "horizontal"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap",
+      "min": 0,
+      "max": 32,
+      "step": 4,
+      "default": 12,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "start", "label": "Start" },
+        { "value": "center", "label": "Center" },
+        { "value": "end", "label": "End" }
+      ],
+      "default": "center"
+    }
+  ],
+  "blocks": [
+    { "type": "button" }
+  ],
+  "presets": [
+    {
+      "name": "Button group",
+      "settings": {
+        "direction": "horizontal",
+        "gap": 12
+      },
+      "blocks": [
+        {
+          "type": "button",
+          "settings": {
+            "label": "Primary action",
+            "style": "primary"
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "label": "Secondary action",
+            "style": "outline"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

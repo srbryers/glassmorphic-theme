@@ -1,0 +1,225 @@
+{%- liquid
+  assign collection = block.settings.collection
+  assign label = block.settings.label
+  if label == blank and collection != blank
+    assign label = collection.title
+  endif
+-%}
+
+{%- if collection != blank -%}
+  {%- case block.settings.style -%}
+    {%- when 'card' -%}
+      <a
+        href="{{ collection.url }}"
+        class="block-collection-link block-collection-link--card"
+        {{ block.shopify_attributes }}
+      >
+        {%- if block.settings.show_image and collection.image -%}
+          <div class="block-collection-link__image">
+            {{
+              collection.image
+              | image_url: width: 800
+              | image_tag:
+                loading: 'lazy',
+                class: 'block-collection-link__img'
+            }}
+          </div>
+        {%- elsif block.settings.show_image -%}
+          <div class="block-collection-link__image block-collection-link__image--placeholder">
+            {{ 'collection-1' | placeholder_svg_tag: 'block-collection-link__placeholder' }}
+          </div>
+        {%- endif -%}
+        <div class="block-collection-link__content">
+          <span class="block-collection-link__title">{{ label }}</span>
+          {%- if block.settings.show_product_count -%}
+            <span class="block-collection-link__count">{{ collection.products_count }} {{ 'collections.products_count' | t }}</span>
+          {%- endif -%}
+        </div>
+      </a>
+
+    {%- when 'button' -%}
+      <a
+        href="{{ collection.url }}"
+        class="block-collection-link block-collection-link--button btn-secondary"
+        {{ block.shopify_attributes }}
+      >
+        {{ label }}
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </a>
+
+    {%- else -%}
+      <a
+        href="{{ collection.url }}"
+        class="block-collection-link block-collection-link--link"
+        {{ block.shopify_attributes }}
+      >
+        {{ label }}
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </a>
+  {%- endcase -%}
+{%- else -%}
+  <div class="block-collection-link block-collection-link--placeholder" {{ block.shopify_attributes }}>
+    <span>Select a collection</span>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+.block-collection-link--card {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: var(--card);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.block-collection-link--card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.block-collection-link__image {
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.block-collection-link__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.block-collection-link--card:hover .block-collection-link__img {
+  transform: scale(1.05);
+}
+
+.block-collection-link__image--placeholder {
+  background: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.block-collection-link__placeholder {
+  width: 50%;
+  height: 50%;
+  opacity: 0.5;
+}
+
+.block-collection-link__content {
+  padding: 1rem;
+}
+
+.block-collection-link__title {
+  display: block;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.block-collection-link__count {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin-top: 0.25rem;
+}
+
+.block-collection-link--button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.block-collection-link--link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--primary);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.block-collection-link--link:hover {
+  text-decoration: none;
+}
+
+.block-collection-link--placeholder {
+  padding: 1rem;
+  background: var(--muted);
+  border-radius: 0.5rem;
+  color: var(--muted-foreground);
+  text-align: center;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection link",
+  "tag": "div",
+  "class": "block-collection-link-wrapper",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Custom label",
+      "info": "Leave blank to use collection title"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        { "value": "card", "label": "Card" },
+        { "value": "button", "label": "Button" },
+        { "value": "link", "label": "Link" }
+      ],
+      "default": "card"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "Show image",
+      "default": true,
+      "info": "Only for card style"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_count",
+      "label": "Show product count",
+      "default": false,
+      "info": "Only for card style"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection card",
+      "settings": {
+        "style": "card",
+        "show_image": true
+      }
+    },
+    {
+      "name": "Collection button",
+      "settings": {
+        "style": "button"
+      }
+    },
+    {
+      "name": "Collection link",
+      "settings": {
+        "style": "link"
+      }
+    }
+  ]
+}
+{% endschema %}

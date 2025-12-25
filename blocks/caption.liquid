@@ -1,0 +1,141 @@
+{%- liquid
+  assign color_style = ''
+  case block.settings.color
+    when 'primary'
+      assign color_class = 'text-[var(--primary)]'
+    when 'muted'
+      assign color_class = 'text-[var(--muted-foreground)]'
+    when 'accent'
+      assign color_class = 'text-[var(--accent)]'
+    when 'white'
+      assign color_class = 'text-white'
+    when 'black'
+      assign color_class = 'text-black'
+    when 'custom'
+      assign color_class = ''
+      assign color_style = 'color: ' | append: block.settings.custom_color | append: ';'
+    else
+      assign color_class = 'text-[var(--foreground)]'
+  endcase
+
+  case block.settings.size
+    when 'xs'
+      assign size_class = 'text-xs'
+    else
+      assign size_class = 'text-sm'
+  endcase
+
+  case block.settings.letter_spacing
+    when 'wide'
+      assign tracking_class = 'tracking-wide'
+    when 'wider'
+      assign tracking_class = 'tracking-wider'
+    else
+      assign tracking_class = 'tracking-normal'
+  endcase
+-%}
+
+<p
+  class="block-caption {{ size_class }} {{ color_class }} {{ tracking_class }} {% if block.settings.uppercase %}uppercase{% endif %}"
+  style="text-align: {{ block.settings.alignment }}; {{ color_style }}"
+  {{ block.shopify_attributes }}
+>
+  {{- block.settings.text -}}
+</p>
+
+{% stylesheet %}
+.block-caption {
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.4;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Caption",
+  "tag": "div",
+  "class": "block-caption-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Caption"
+    },
+    {
+      "type": "select",
+      "id": "color",
+      "label": "Color",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "primary", "label": "Primary" },
+        { "value": "muted", "label": "Muted" },
+        { "value": "accent", "label": "Accent" },
+        { "value": "white", "label": "White" },
+        { "value": "black", "label": "Black" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "primary"
+    },
+    {
+      "type": "color",
+      "id": "custom_color",
+      "label": "Custom color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.color == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Size",
+      "options": [
+        { "value": "xs", "label": "Extra small" },
+        { "value": "sm", "label": "Small" }
+      ],
+      "default": "sm"
+    },
+    {
+      "type": "text_alignment",
+      "id": "alignment",
+      "label": "Alignment",
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "uppercase",
+      "label": "Uppercase",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "letter_spacing",
+      "label": "Letter spacing",
+      "options": [
+        { "value": "normal", "label": "Normal" },
+        { "value": "wide", "label": "Wide" },
+        { "value": "wider", "label": "Wider" }
+      ],
+      "default": "wide"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Eyebrow",
+      "settings": {
+        "color": "primary",
+        "uppercase": true,
+        "letter_spacing": "wider"
+      }
+    },
+    {
+      "name": "Label",
+      "settings": {
+        "color": "muted",
+        "uppercase": false,
+        "letter_spacing": "normal"
+      }
+    }
+  ]
+}
+{% endschema %}

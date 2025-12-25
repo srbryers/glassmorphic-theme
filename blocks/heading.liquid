@@ -1,0 +1,180 @@
+{%- liquid
+  assign heading_tag = block.settings.heading_tag
+  assign size = block.settings.size
+
+  case size
+    when 'xs'
+      assign size_class = 'text-sm'
+    when 'sm'
+      assign size_class = 'text-base'
+    when 'md'
+      assign size_class = 'text-lg md:text-xl'
+    when 'lg'
+      assign size_class = 'text-xl md:text-2xl lg:text-3xl'
+    when 'xl'
+      assign size_class = 'text-2xl md:text-3xl lg:text-4xl'
+    when '2xl'
+      assign size_class = 'text-3xl md:text-4xl lg:text-5xl'
+    when '3xl'
+      assign size_class = 'text-4xl md:text-5xl lg:text-6xl xl:text-7xl'
+    else
+      assign size_class = 'text-xl md:text-2xl lg:text-3xl'
+  endcase
+
+  assign color_style = ''
+  case block.settings.color
+    when 'primary'
+      assign color_class = 'text-[var(--primary)]'
+    when 'muted'
+      assign color_class = 'text-[var(--muted-foreground)]'
+    when 'white'
+      assign color_class = 'text-white'
+    when 'black'
+      assign color_class = 'text-black'
+    when 'custom'
+      assign color_class = ''
+      assign color_style = 'color: ' | append: block.settings.custom_color | append: ';'
+    else
+      assign color_class = 'text-[var(--foreground)]'
+  endcase
+
+  assign font_class = 'font-heading uppercase tracking-wide'
+  if block.settings.font_style == 'body'
+    assign font_class = 'font-sans font-bold'
+  endif
+-%}
+
+<{{ heading_tag }}
+  class="block-heading {{ size_class }} {{ color_class }} {{ font_class }}"
+  style="text-align: {{ block.settings.alignment }}; max-width: {{ block.settings.max_width }}%; {{ color_style }}"
+  {{ block.shopify_attributes }}
+>
+  {{- block.settings.text -}}
+</{{ heading_tag }}>
+
+{% stylesheet %}
+.block-heading {
+  margin: 0;
+  line-height: 1.1;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Heading",
+  "tag": "div",
+  "class": "block-heading-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading tag",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" },
+        { "value": "h6", "label": "H6" },
+        { "value": "p", "label": "Paragraph" }
+      ],
+      "default": "h2",
+      "info": "Use H1 for main page headings"
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Size",
+      "options": [
+        { "value": "xs", "label": "Extra small" },
+        { "value": "sm", "label": "Small" },
+        { "value": "md", "label": "Medium" },
+        { "value": "lg", "label": "Large" },
+        { "value": "xl", "label": "Extra large" },
+        { "value": "2xl", "label": "2X large" },
+        { "value": "3xl", "label": "3X large" }
+      ],
+      "default": "lg"
+    },
+    {
+      "type": "select",
+      "id": "color",
+      "label": "Color",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "primary", "label": "Primary" },
+        { "value": "muted", "label": "Muted" },
+        { "value": "white", "label": "White" },
+        { "value": "black", "label": "Black" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "color",
+      "id": "custom_color",
+      "label": "Custom color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.color == 'custom' }}"
+    },
+    {
+      "type": "text_alignment",
+      "id": "alignment",
+      "label": "Alignment",
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "font_style",
+      "label": "Font style",
+      "options": [
+        { "value": "heading", "label": "Heading (Bebas Neue)" },
+        { "value": "body", "label": "Body (Inter)" }
+      ],
+      "default": "heading"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "default": 100,
+      "unit": "%"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Section title",
+      "settings": {
+        "heading_tag": "h2",
+        "size": "xl",
+        "alignment": "center"
+      }
+    },
+    {
+      "name": "Card title",
+      "settings": {
+        "heading_tag": "h3",
+        "size": "md",
+        "alignment": "left"
+      }
+    },
+    {
+      "name": "Hero heading",
+      "settings": {
+        "heading_tag": "h1",
+        "size": "3xl",
+        "alignment": "center"
+      }
+    }
+  ]
+}
+{% endschema %}

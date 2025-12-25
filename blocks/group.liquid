@@ -1,0 +1,205 @@
+{%- liquid
+  assign direction = block.settings.direction
+  assign alignment = block.settings.alignment
+  assign justify = block.settings.justify
+
+  case direction
+    when 'horizontal'
+      assign flex_direction = 'row'
+    else
+      assign flex_direction = 'column'
+  endcase
+
+  case alignment
+    when 'start'
+      assign align_items = 'flex-start'
+    when 'end'
+      assign align_items = 'flex-end'
+    when 'stretch'
+      assign align_items = 'stretch'
+    else
+      assign align_items = 'center'
+  endcase
+
+  case justify
+    when 'start'
+      assign justify_content = 'flex-start'
+    when 'end'
+      assign justify_content = 'flex-end'
+    when 'between'
+      assign justify_content = 'space-between'
+    else
+      assign justify_content = 'center'
+  endcase
+
+  case block.settings.max_width
+    when 'sm'
+      assign max_width_value = '640px'
+    when 'md'
+      assign max_width_value = '768px'
+    when 'lg'
+      assign max_width_value = '1024px'
+    when 'xl'
+      assign max_width_value = '1280px'
+    else
+      assign max_width_value = 'none'
+  endcase
+-%}
+
+<div
+  class="block-group"
+  style="
+    --group-direction: {{ flex_direction }};
+    --group-gap: {{ block.settings.gap }}px;
+    --group-padding: {{ block.settings.padding }}px;
+    --group-align: {{ align_items }};
+    --group-justify: {{ justify_content }};
+    --group-radius: {{ block.settings.border_radius }}px;
+    --group-max-width: {{ max_width_value }};
+    {%- if block.settings.background_color != blank and block.settings.background_color != 'rgba(0,0,0,0)' -%}
+      --group-bg: {{ block.settings.background_color }};
+    {%- endif -%}
+  "
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</div>
+
+{% stylesheet %}
+.block-group {
+  display: flex;
+  flex-direction: var(--group-direction, column);
+  gap: var(--group-gap, 16px);
+  padding: var(--group-padding, 0);
+  align-items: var(--group-align, center);
+  justify-content: var(--group-justify, center);
+  border-radius: var(--group-radius, 0);
+  max-width: var(--group-max-width, none);
+  width: 100%;
+  background-color: var(--group-bg, transparent);
+}
+
+.block-group:empty {
+  display: none;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Group",
+  "tag": "div",
+  "class": "block-group-wrapper",
+  "settings": [
+    {
+      "type": "select",
+      "id": "direction",
+      "label": "Direction",
+      "options": [
+        { "value": "vertical", "label": "Vertical" },
+        { "value": "horizontal", "label": "Horizontal" }
+      ],
+      "default": "vertical"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "label": "Padding",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "start", "label": "Start" },
+        { "value": "center", "label": "Center" },
+        { "value": "end", "label": "End" },
+        { "value": "stretch", "label": "Stretch" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "justify",
+      "label": "Justify",
+      "options": [
+        { "value": "start", "label": "Start" },
+        { "value": "center", "label": "Center" },
+        { "value": "end", "label": "End" },
+        { "value": "between", "label": "Space between" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 32,
+      "step": 4,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "max_width",
+      "label": "Max width",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "sm", "label": "Small (640px)" },
+        { "value": "md", "label": "Medium (768px)" },
+        { "value": "lg", "label": "Large (1024px)" },
+        { "value": "xl", "label": "Extra large (1280px)" }
+      ],
+      "default": "none"
+    }
+  ],
+  "blocks": [{ "type": "@theme" }],
+  "presets": [
+    {
+      "name": "Column",
+      "settings": {
+        "direction": "vertical",
+        "alignment": "start",
+        "gap": 16
+      }
+    },
+    {
+      "name": "Row",
+      "settings": {
+        "direction": "horizontal",
+        "alignment": "center",
+        "gap": 12
+      }
+    },
+    {
+      "name": "Card container",
+      "settings": {
+        "direction": "vertical",
+        "padding": 24,
+        "border_radius": 16,
+        "gap": 16
+      }
+    }
+  ]
+}
+{% endschema %}

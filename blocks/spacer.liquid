@@ -1,0 +1,71 @@
+<div
+  class="block-spacer"
+  style="--spacer-mobile: {{ block.settings.height_mobile }}px; --spacer-desktop: {{ block.settings.height_desktop }}px;"
+  aria-hidden="true"
+  {{ block.shopify_attributes }}
+></div>
+
+{% stylesheet %}
+.block-spacer {
+  height: var(--spacer-mobile, 24px);
+}
+
+@media (min-width: 768px) {
+  .block-spacer {
+    height: var(--spacer-desktop, 40px);
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Spacer",
+  "tag": "div",
+  "class": "block-spacer-wrapper",
+  "settings": [
+    {
+      "type": "range",
+      "id": "height_mobile",
+      "label": "Height (mobile)",
+      "min": 0,
+      "max": 200,
+      "step": 8,
+      "default": 24,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "height_desktop",
+      "label": "Height (desktop)",
+      "min": 0,
+      "max": 200,
+      "step": 8,
+      "default": 40,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Small",
+      "settings": {
+        "height_mobile": 16,
+        "height_desktop": 24
+      }
+    },
+    {
+      "name": "Medium",
+      "settings": {
+        "height_mobile": 32,
+        "height_desktop": 48
+      }
+    },
+    {
+      "name": "Large",
+      "settings": {
+        "height_mobile": 48,
+        "height_desktop": 80
+      }
+    }
+  ]
+}
+{% endschema %}

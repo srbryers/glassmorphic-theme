@@ -1,0 +1,163 @@
+{%- liquid
+  assign size = block.settings.size
+
+  case size
+    when 'sm'
+      assign size_class = 'text-sm'
+    when 'lg'
+      assign size_class = 'text-lg md:text-xl'
+    when 'xl'
+      assign size_class = 'text-xl md:text-2xl'
+    else
+      assign size_class = 'text-base md:text-lg'
+  endcase
+
+  assign color_style = ''
+  case block.settings.color
+    when 'muted'
+      assign color_class = 'text-[var(--muted-foreground)]'
+    when 'primary'
+      assign color_class = 'text-[var(--primary)]'
+    when 'white'
+      assign color_class = 'text-white'
+    when 'black'
+      assign color_class = 'text-black'
+    when 'custom'
+      assign color_class = ''
+      assign color_style = 'color: ' | append: block.settings.custom_color | append: ';'
+    else
+      assign color_class = 'text-[var(--foreground)]'
+  endcase
+
+  case block.settings.max_width
+    when 'prose'
+      assign max_width_value = '65ch'
+    when '2xl'
+      assign max_width_value = '42rem'
+    else
+      assign max_width_value = 'none'
+  endcase
+-%}
+
+<div
+  class="block-rich-text {{ size_class }} {{ color_class }}"
+  style="text-align: {{ block.settings.alignment }}; max-width: {{ max_width_value }}; {{ color_style }}"
+  {{ block.shopify_attributes }}
+>
+  {{ block.settings.text }}
+</div>
+
+{% stylesheet %}
+.block-rich-text {
+  line-height: 1.6;
+}
+
+.block-rich-text p {
+  margin: 0 0 1em;
+}
+
+.block-rich-text p:last-child {
+  margin-bottom: 0;
+}
+
+.block-rich-text ul,
+.block-rich-text ol {
+  margin: 0 0 1em;
+  padding-left: 1.5em;
+}
+
+.block-rich-text a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.block-rich-text a:hover {
+  text-decoration: none;
+}
+
+.block-rich-text strong {
+  font-weight: 600;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Text",
+  "tag": "div",
+  "class": "block-rich-text-wrapper",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Share your brand story, describe your products, or welcome customers to your store.</p>"
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Size",
+      "options": [
+        { "value": "sm", "label": "Small" },
+        { "value": "base", "label": "Base" },
+        { "value": "lg", "label": "Large" },
+        { "value": "xl", "label": "Extra large" }
+      ],
+      "default": "base"
+    },
+    {
+      "type": "select",
+      "id": "color",
+      "label": "Color",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "muted", "label": "Muted" },
+        { "value": "primary", "label": "Primary" },
+        { "value": "white", "label": "White" },
+        { "value": "black", "label": "Black" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "color",
+      "id": "custom_color",
+      "label": "Custom color",
+      "default": "#000000",
+      "visible_if": "{{ block.settings.color == 'custom' }}"
+    },
+    {
+      "type": "text_alignment",
+      "id": "alignment",
+      "label": "Alignment",
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "max_width",
+      "label": "Max width",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "prose", "label": "Prose (65 characters)" },
+        { "value": "2xl", "label": "2XL (42rem)" }
+      ],
+      "default": "none"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Body text",
+      "settings": {
+        "size": "base",
+        "color": "muted"
+      }
+    },
+    {
+      "name": "Lead paragraph",
+      "settings": {
+        "size": "lg",
+        "color": "default"
+      }
+    }
+  ]
+}
+{% endschema %}

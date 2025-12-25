@@ -1,46 +1,105 @@
 {%- comment -%}
   Hero Section
 
-  A full-width hero section for the homepage with gradient background.
-  Features optional lighthouse beam effect for coastal brand identity.
+  A full-width hero section with image, video, or gradient background.
+  Uses @theme blocks for flexible, reusable content composition.
 {%- endcomment -%}
 
-<section class="hero py-20 md:py-32 relative overflow-hidden">
-  {%- comment -%} Gradient background {%- endcomment -%}
-  <div class="absolute inset-0 bg-gradient-to-br from-[var(--muted)] via-white to-[var(--muted)]"></div>
-  <div class="absolute inset-0 bg-gradient-to-tr from-[var(--primary)]/5 via-transparent to-[var(--accent)]/5"></div>
+{%- liquid
+  assign vertical_position = section.settings.content_position_vertical
+  assign horizontal_position = section.settings.content_position_horizontal
+  assign text_alignment = section.settings.text_alignment
+  assign background_type = section.settings.background_type
 
-  {%- comment -%} Lighthouse beam effect {%- endcomment -%}
+  case vertical_position
+    when 'top'
+      assign vertical_class = 'items-start pt-20 pb-32'
+    when 'bottom'
+      assign vertical_class = 'items-end pt-32 pb-20'
+    else
+      assign vertical_class = 'items-center py-20 md:py-32'
+  endcase
+
+  case horizontal_position
+    when 'left'
+      assign content_align_class = 'mr-auto'
+    when 'right'
+      assign content_align_class = 'ml-auto'
+    else
+      assign content_align_class = 'mx-auto'
+  endcase
+
+  assign has_media_background = false
+  if background_type == 'image' or background_type == 'video'
+    assign has_media_background = true
+  endif
+-%}
+
+<section class="hero min-h-[60vh] md:min-h-[80vh] relative overflow-hidden flex {{ vertical_class }}">
+  {%- case background_type -%}
+    {%- when 'image' -%}
+      {%- if section.settings.background_image != blank -%}
+        <div class="absolute inset-0">
+          {{
+            section.settings.background_image
+            | image_url: width: 2000
+            | image_tag:
+              class: 'w-full h-full object-cover',
+              loading: 'eager',
+              fetchpriority: 'high'
+          }}
+          <div class="absolute inset-0 bg-black/{{ section.settings.overlay_opacity }}"></div>
+        </div>
+      {%- endif -%}
+
+    {%- when 'video' -%}
+      {%- if section.settings.background_video != blank -%}
+        <div class="absolute inset-0">
+          {{
+            section.settings.background_video
+            | video_tag:
+              autoplay: true,
+              loop: true,
+              muted: true,
+              playsinline: true,
+              class: 'w-full h-full object-cover'
+          }}
+          <div class="absolute inset-0 bg-black/{{ section.settings.overlay_opacity }}"></div>
+        </div>
+      {%- elsif section.settings.background_video_url != blank -%}
+        <div class="absolute inset-0">
+          <video autoplay loop muted playsinline class="w-full h-full object-cover">
+            <source src="{{ section.settings.background_video_url }}" type="video/mp4">
+          </video>
+          <div class="absolute inset-0 bg-black/{{ section.settings.overlay_opacity }}"></div>
+        </div>
+      {%- endif -%}
+
+    {%- else -%}
+      <div class="absolute inset-0 bg-gradient-to-br from-[var(--muted)] via-white to-[var(--muted)]"></div>
+      <div class="absolute inset-0 bg-gradient-to-tr from-[var(--primary)]/5 via-transparent to-[var(--accent)]/5"></div>
+      <div class="absolute top-0 left-1/4 w-96 h-96 bg-[var(--primary)]/10 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-[var(--accent)]/10 rounded-full blur-3xl"></div>
+  {%- endcase -%}
+
   {%- if section.settings.show_lighthouse_beam -%}
     <div class="lighthouse-beam" aria-hidden="true"></div>
   {%- endif -%}
 
-  {%- comment -%} Decorative blur orbs {%- endcomment -%}
-  <div class="absolute top-0 left-1/4 w-96 h-96 bg-[var(--primary)]/10 rounded-full blur-3xl"></div>
-  <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-[var(--accent)]/10 rounded-full blur-3xl"></div>
-
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[var(--foreground)] mb-6 tracking-tight">
-      {{ section.settings.heading }}
-    </h1>
-    {%- if section.settings.subheading != blank -%}
-      <p class="text-lg md:text-xl text-[var(--muted-foreground)] max-w-2xl mx-auto mb-10">
-        {{ section.settings.subheading }}
-      </p>
-    {%- endif -%}
-    {%- if section.settings.button_label != blank -%}
-      <a
-        href="{{ section.settings.button_link }}"
-        class="btn-primary btn-lg"
-      >
-        {{ section.settings.button_label }}
-        <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </a>
-    {%- endif -%}
+  <div
+    class="hero__content relative w-full max-w-7xl {{ content_align_class }} px-4 sm:px-6 lg:px-8 {% if has_media_background %}hero__content--light{% endif %}"
+    style="text-align: {{ text_alignment }};"
+  >
+    {% content_for 'blocks' %}
   </div>
 </section>
+
+{% stylesheet %}
+.hero__content--light {
+  --foreground: white;
+  --muted-foreground: rgba(255, 255, 255, 0.8);
+}
+{% endstylesheet %}
 
 {% schema %}
 {
@@ -49,39 +108,130 @@
   "class": "section-hero",
   "settings": [
     {
-      "type": "checkbox",
-      "id": "show_lighthouse_beam",
-      "label": "Show lighthouse beam effect",
-      "default": true,
-      "info": "Subtle animated light beam for coastal brand identity"
+      "type": "header",
+      "content": "Background"
     },
     {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Beacon Basics"
+      "type": "select",
+      "id": "background_type",
+      "label": "Background type",
+      "options": [
+        { "value": "gradient", "label": "Gradient" },
+        { "value": "image", "label": "Image" },
+        { "value": "video", "label": "Video" }
+      ],
+      "default": "gradient"
     },
     {
-      "type": "text",
-      "id": "subheading",
-      "label": "Subheading",
-      "default": "Quality basics for everyday"
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image",
+      "info": "Recommended: 2000x1000px or larger"
     },
     {
-      "type": "text",
-      "id": "button_label",
-      "label": "Button label",
-      "default": "Shop the Heavyweight Tee"
+      "type": "video",
+      "id": "background_video",
+      "label": "Background video",
+      "info": "Upload a video from Settings > Files"
     },
     {
       "type": "url",
-      "id": "button_link",
-      "label": "Button link"
+      "id": "background_video_url",
+      "label": "Or video URL",
+      "info": "External MP4 video URL (used if no uploaded video)"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "default": 40,
+      "unit": "%",
+      "info": "Darkens image/video for better text readability"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_lighthouse_beam",
+      "label": "Show lighthouse beam effect",
+      "default": false,
+      "info": "Subtle animated light beam for coastal brand identity"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "content_position_vertical",
+      "label": "Vertical position",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "middle", "label": "Middle" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "middle"
+    },
+    {
+      "type": "select",
+      "id": "content_position_horizontal",
+      "label": "Horizontal position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" },
+        { "value": "justify", "label": "Justify" }
+      ],
+      "default": "center"
     }
+  ],
+  "blocks": [
+    { "type": "@theme" }
   ],
   "presets": [
     {
-      "name": "Hero"
+      "name": "Hero",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Beacon Basics",
+            "heading_tag": "h1",
+            "size": "3xl",
+            "alignment": "center"
+          }
+        },
+        {
+          "type": "rich-text",
+          "settings": {
+            "text": "<p>Quality basics for everyday</p>",
+            "size": "lg",
+            "color": "muted",
+            "alignment": "center"
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "label": "Shop the collection",
+            "style": "primary",
+            "size": "lg",
+            "show_arrow": true
+          }
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,204 @@
+{%- liquid
+  assign aspect_ratio = block.settings.aspect_ratio
+  assign hover_effect = block.settings.hover_effect
+
+  case block.settings.shadow
+    when 'sm'
+      assign shadow_class = 'shadow-sm'
+    when 'md'
+      assign shadow_class = 'shadow-md'
+    when 'lg'
+      assign shadow_class = 'shadow-lg'
+    when 'xl'
+      assign shadow_class = 'shadow-xl'
+    else
+      assign shadow_class = ''
+  endcase
+
+  case hover_effect
+    when 'zoom'
+      assign hover_class = 'block-image--zoom'
+    when 'lift'
+      assign hover_class = 'block-image--lift'
+    else
+      assign hover_class = ''
+  endcase
+
+  assign loading = 'lazy'
+  if block.settings.lazy_load == false
+    assign loading = 'eager'
+  endif
+-%}
+
+{%- if block.settings.image != blank -%}
+  {%- assign wrapper_tag = 'div' -%}
+  {%- if block.settings.link != blank -%}
+    {%- assign wrapper_tag = 'a' -%}
+  {%- endif -%}
+
+  <{{ wrapper_tag }}
+    class="block-image {{ shadow_class }} {{ hover_class }}"
+    style="--image-radius: {{ block.settings.border_radius }}px; {% if aspect_ratio != 'auto' %}--image-aspect: {{ aspect_ratio }};{% endif %}"
+    {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% endif %}
+    {{ block.shopify_attributes }}
+  >
+    {{
+      block.settings.image
+      | image_url: width: 1600
+      | image_tag:
+        loading: loading,
+        class: 'block-image__img'
+    }}
+  </{{ wrapper_tag }}>
+{%- else -%}
+  <div
+    class="block-image block-image--placeholder {{ shadow_class }}"
+    style="--image-radius: {{ block.settings.border_radius }}px; {% if aspect_ratio != 'auto' %}--image-aspect: {{ aspect_ratio }};{% endif %}"
+    {{ block.shopify_attributes }}
+  >
+    {{ 'image' | placeholder_svg_tag: 'block-image__placeholder' }}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+.block-image {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--image-radius, 0);
+  width: 100%;
+}
+
+.block-image[style*="--image-aspect"] {
+  aspect-ratio: var(--image-aspect);
+}
+
+.block-image__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.block-image--zoom:hover .block-image__img {
+  transform: scale(1.05);
+}
+
+.block-image--lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.block-image--lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.block-image--placeholder {
+  background: var(--muted);
+  aspect-ratio: var(--image-aspect, 4/3);
+}
+
+.block-image__placeholder {
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Image",
+  "tag": "div",
+  "class": "block-image-wrapper",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    },
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "Aspect ratio",
+      "options": [
+        { "value": "auto", "label": "Original" },
+        { "value": "1/1", "label": "Square (1:1)" },
+        { "value": "3/4", "label": "Portrait (3:4)" },
+        { "value": "4/3", "label": "Landscape (4:3)" },
+        { "value": "16/9", "label": "Widescreen (16:9)" }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 32,
+      "step": 4,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "shadow",
+      "label": "Shadow",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "sm", "label": "Small" },
+        { "value": "md", "label": "Medium" },
+        { "value": "lg", "label": "Large" },
+        { "value": "xl", "label": "Extra large" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "hover_effect",
+      "label": "Hover effect",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "zoom", "label": "Zoom" },
+        { "value": "lift", "label": "Lift" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "checkbox",
+      "id": "lazy_load",
+      "label": "Lazy load",
+      "default": true,
+      "info": "Disable for above-the-fold images"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Standard image",
+      "settings": {
+        "aspect_ratio": "auto",
+        "shadow": "none"
+      }
+    },
+    {
+      "name": "Card image",
+      "settings": {
+        "aspect_ratio": "3/4",
+        "border_radius": 16,
+        "shadow": "md"
+      }
+    },
+    {
+      "name": "Hero image",
+      "settings": {
+        "aspect_ratio": "16/9",
+        "lazy_load": false
+      }
+    }
+  ]
+}
+{% endschema %}

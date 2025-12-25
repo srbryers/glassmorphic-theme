@@ -1,0 +1,108 @@
+{%- if block.settings.product != blank -%}
+  {%- render 'product-card',
+    product: block.settings.product,
+    show_vendor: block.settings.show_vendor,
+    show_quick_add: block.settings.show_quick_add,
+    show_quick_view: block.settings.show_quick_view,
+    image_ratio: block.settings.image_ratio
+  -%}
+{%- else -%}
+  <div class="block-product-card-placeholder" {{ block.shopify_attributes }}>
+    <div class="block-product-card-placeholder__image">
+      {{ 'product-1' | placeholder_svg_tag: 'block-product-card-placeholder__svg' }}
+    </div>
+    <div class="block-product-card-placeholder__content">
+      <div class="block-product-card-placeholder__title"></div>
+      <div class="block-product-card-placeholder__price"></div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+.block-product-card-placeholder {
+  background: var(--card);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.block-product-card-placeholder__image {
+  aspect-ratio: 3/4;
+  background: var(--muted);
+}
+
+.block-product-card-placeholder__svg {
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+}
+
+.block-product-card-placeholder__content {
+  padding: 1rem;
+}
+
+.block-product-card-placeholder__title {
+  height: 1rem;
+  width: 80%;
+  background: var(--muted);
+  border-radius: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.block-product-card-placeholder__price {
+  height: 1rem;
+  width: 40%;
+  background: var(--muted);
+  border-radius: 0.25rem;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product card",
+  "tag": "div",
+  "class": "block-product-card-wrapper",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "label": "Show quick add",
+      "default": true,
+      "info": "For products without variants"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_view",
+      "label": "Show quick view",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        { "value": "1/1", "label": "Square (1:1)" },
+        { "value": "3/4", "label": "Portrait (3:4)" },
+        { "value": "4/3", "label": "Landscape (4:3)" }
+      ],
+      "default": "3/4"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product card",
+      "settings": {}
+    }
+  ]
+}
+{% endschema %}
