@@ -1,21 +1,48 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
+    "logo_width": 150,
     "color_primary": "#FC4A3F",
     "color_secondary": "#332626",
     "color_background": "#FFFFFF",
     "color_text": "#332626",
-    "logo_width": 150,
     "sections": {
       "header": {
         "type": "header",
         "settings": {
-          "show_store_name": false
+          "show_store_name": false,
+          "background_color": "#ffffff",
+          "custom_text_color": "#000000"
         }
       },
       "footer": {
         "type": "footer",
         "settings": {
           "show_store_name": false
+        }
+      }
+    },
+    "content_for_index": [],
+    "blocks": {
+      "8203995283794836152": {
+        "type": "shopify://apps/reservit/blocks/cart-reservation/019a9c98-1438-72f5-862e-b2b0ad052b7c",
+        "disabled": false,
+        "settings": {
+          "enable": true,
+          "display_mode": "inline",
+          "floating_position": "bottom-right",
+          "checkout_button_selector": "#checkout, button[name='checkout'], [data-cart-checkout], .cart__checkout-button",
+          "debug_mode": false,
+          "custom_css": "",
+          "api_url_override": ""
         }
       }
     }
