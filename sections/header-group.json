@@ -7,7 +7,7 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
- {
+{
   "type": "header",
   "name": "Header group",
   "sections": {
@@ -15,7 +15,8 @@
       "type": "header",
       "settings": {
         "menu": "",
-        "logo_width": 120,
+        "logo": "shopify://shop_images/Lightouse_-_Patch_wide.png",
+        "logo_width": 130,
         "show_store_name": false,
         "show_search": false,
         "show_account": false,
