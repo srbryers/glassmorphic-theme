@@ -20,6 +20,7 @@
 {%- liquid
   assign main_menu = menu
   assign logo_width_value = logo_width | default: 120
+  assign logo_width_retina = logo_width_value | times: 2
   assign show_name = show_store_name | default: false
   assign bg_style = background_style | default: 'glass'
   assign txt_color = text_color | default: 'default'
@@ -60,7 +61,7 @@
       <a href="{{ routes.root_url }}" class="flex-shrink-0 flex items-center gap-3">
         {%- if logo_image -%}
           <img
-            src="{{ logo_image | image_url: width: logo_width_value | times: 2 }}"
+            src="{{ logo_image | image_url: width: logo_width_retina }}"
             alt="{{ shop.name }}"
             width="{{ logo_width_value }}"
             height="{{ logo_width_value | divided_by: logo_image.aspect_ratio }}"
