@@ -1,0 +1,225 @@
+{%- comment -%}
+  Search Results Section
+  Renders search form and results with filtering.
+{%- endcomment -%}
+
+{%- liquid
+  assign sort_by = search.sort_by | default: search.default_sort_by
+-%}
+
+<div class="search-page py-12 md:py-20">
+  <div class="container max-w-6xl mx-auto px-4">
+    <div class="text-center mb-12">
+      <h1 class="font-heading text-3xl md:text-5xl font-bold mb-6">
+        {{ 'search.title' | t }}
+      </h1>
+
+      <form action="{{ routes.search_url }}" method="get" class="max-w-2xl mx-auto">
+        <div class="relative">
+          <input
+            type="search"
+            name="q"
+            value="{{ search.terms | escape }}"
+            placeholder="{{ 'search.placeholder' | t }}"
+            class="input w-full pl-12 pr-4 py-4 text-lg rounded-2xl"
+            aria-label="{{ 'search.placeholder' | t }}"
+          >
+          <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--muted-foreground)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 btn btn-primary btn-sm">
+            {{ 'search.submit' | t }}
+          </button>
+        </div>
+
+        {%- if section.settings.enable_filters -%}
+          <div class="flex flex-wrap justify-center gap-2 mt-4">
+            <label class="inline-flex items-center gap-2 px-3 py-1 glass rounded-full cursor-pointer">
+              <input type="radio" name="type" value="" {% if search.types == blank %}checked{% endif %} class="text-[var(--primary)]">
+              <span class="text-sm">{{ 'search.all' | t }}</span>
+            </label>
+            <label class="inline-flex items-center gap-2 px-3 py-1 glass rounded-full cursor-pointer">
+              <input type="radio" name="type" value="product" {% if search.types contains 'product' %}checked{% endif %} class="text-[var(--primary)]">
+              <span class="text-sm">{{ 'search.products' | t }}</span>
+            </label>
+            <label class="inline-flex items-center gap-2 px-3 py-1 glass rounded-full cursor-pointer">
+              <input type="radio" name="type" value="article" {% if search.types contains 'article' %}checked{% endif %} class="text-[var(--primary)]">
+              <span class="text-sm">{{ 'search.articles' | t }}</span>
+            </label>
+            <label class="inline-flex items-center gap-2 px-3 py-1 glass rounded-full cursor-pointer">
+              <input type="radio" name="type" value="page" {% if search.types contains 'page' %}checked{% endif %} class="text-[var(--primary)]">
+              <span class="text-sm">{{ 'search.pages' | t }}</span>
+            </label>
+          </div>
+        {%- endif -%}
+      </form>
+    </div>
+
+    {%- if search.performed -%}
+      <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <p class="text-[var(--muted-foreground)]">
+          {%- if search.results_count == 0 -%}
+            {{ 'search.no_results' | t: terms: search.terms }}
+          {%- else -%}
+            {{ 'search.results_count' | t: count: search.results_count, terms: search.terms }}
+          {%- endif -%}
+        </p>
+
+        {%- if search.results_count > 0 and section.settings.enable_sorting -%}
+          <div class="flex items-center gap-2">
+            <label for="search-sort" class="text-sm text-[var(--muted-foreground)]">
+              {{ 'search.sort_by' | t }}
+            </label>
+            <select
+              id="search-sort"
+              class="input py-2 px-3 text-sm"
+              onchange="window.location.href = this.value"
+            >
+              {%- for option in search.sort_options -%}
+                <option value="{{ option.url }}" {% if option.value == sort_by %}selected{% endif %}>
+                  {{ option.name }}
+                </option>
+              {%- endfor -%}
+            </select>
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if search.results_count > 0 -%}
+        {%- paginate search.results by section.settings.products_per_page -%}
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-{{ section.settings.columns }} gap-6">
+            {%- for item in search.results -%}
+              {%- case item.object_type -%}
+                {%- when 'product' -%}
+                  {% render 'product-card', product: item %}
+
+                {%- when 'article' -%}
+                  <a href="{{ item.url }}" class="glass rounded-2xl overflow-hidden group hover:shadow-glass-lg transition-all">
+                    {%- if item.image -%}
+                      <div class="aspect-video overflow-hidden">
+                        <img
+                          src="{{ item.image | image_url: width: 600 }}"
+                          alt="{{ item.title }}"
+                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          width="600"
+                          height="338"
+                          loading="lazy"
+                        >
+                      </div>
+                    {%- endif -%}
+                    <div class="p-6">
+                      <span class="text-xs font-medium text-[var(--primary)] uppercase tracking-wider">
+                        {{ 'search.article' | t }}
+                      </span>
+                      <h3 class="font-heading text-lg font-bold mt-2 group-hover:text-[var(--primary)] transition-colors">
+                        {{ item.title }}
+                      </h3>
+                      <p class="text-sm text-[var(--muted-foreground)] mt-2 line-clamp-2">
+                        {{ item.content | strip_html | truncate: 120 }}
+                      </p>
+                      <p class="text-xs text-[var(--muted-foreground)] mt-3">
+                        {{ item.published_at | date: format: 'abbreviated_date' }}
+                      </p>
+                    </div>
+                  </a>
+
+                {%- when 'page' -%}
+                  <a href="{{ item.url }}" class="glass rounded-2xl p-6 group hover:shadow-glass-lg transition-all">
+                    <span class="text-xs font-medium text-[var(--primary)] uppercase tracking-wider">
+                      {{ 'search.page' | t }}
+                    </span>
+                    <h3 class="font-heading text-lg font-bold mt-2 group-hover:text-[var(--primary)] transition-colors">
+                      {{ item.title }}
+                    </h3>
+                    <p class="text-sm text-[var(--muted-foreground)] mt-2 line-clamp-3">
+                      {{ item.content | strip_html | truncate: 150 }}
+                    </p>
+                  </a>
+
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+
+          {%- if paginate.pages > 1 -%}
+            <div class="mt-12 flex justify-center">
+              {{ paginate | default_pagination }}
+            </div>
+          {%- endif -%}
+        {%- endpaginate -%}
+
+      {%- else -%}
+        <div class="glass rounded-2xl p-12 text-center max-w-xl mx-auto">
+          <div class="w-20 h-20 rounded-full bg-[var(--muted)] flex items-center justify-center mx-auto mb-6">
+            <svg class="w-10 h-10 text-[var(--muted-foreground)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+          </div>
+          <h2 class="font-heading text-xl font-bold mb-2">{{ 'search.no_results_title' | t }}</h2>
+          <p class="text-[var(--muted-foreground)] mb-6">{{ 'search.no_results_description' | t }}</p>
+
+          {%- if section.settings.show_suggestions -%}
+            <div class="text-left">
+              <p class="font-medium mb-3">{{ 'search.suggestions_title' | t }}</p>
+              <ul class="text-sm text-[var(--muted-foreground)] space-y-1">
+                <li>{{ 'search.suggestion_1' | t }}</li>
+                <li>{{ 'search.suggestion_2' | t }}</li>
+                <li>{{ 'search.suggestion_3' | t }}</li>
+              </ul>
+            </div>
+          {%- endif -%}
+
+          <a href="{{ routes.all_products_collection_url }}" class="btn btn-primary mt-6">
+            {{ 'search.browse_products' | t }}
+          </a>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Search Results",
+  "tag": "section",
+  "class": "section-search",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Results per page",
+      "min": 8,
+      "max": 24,
+      "step": 4,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns on desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filters",
+      "label": "Enable type filters",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable sorting",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_suggestions",
+      "label": "Show search suggestions",
+      "default": true,
+      "info": "Display helpful tips when no results are found"
+    }
+  ]
+}
+{% endschema %}

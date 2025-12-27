@@ -1,0 +1,72 @@
+{%- comment -%}
+  Customer Activate Account Section
+  Renders account activation form for new customers.
+{%- endcomment -%}
+
+<div class="customer-activate py-12 md:py-20">
+  <div class="container max-w-md mx-auto px-4">
+    <div class="glass rounded-2xl p-8 md:p-10 shadow-glass-lg">
+      <div class="text-center mb-8">
+        <h1 class="font-heading text-3xl md:text-4xl font-bold mb-2">
+          {{ 'customer.activate_account.title' | t }}
+        </h1>
+        <p class="text-[var(--muted-foreground)]">
+          {{ 'customer.activate_account.subtitle' | t }}
+        </p>
+      </div>
+
+      {%- form 'activate_customer_password', class: 'space-y-6' -%}
+        {{ form.errors | default_errors }}
+
+        <div class="space-y-2">
+          <label for="activate-password" class="block text-sm font-medium">
+            {{ 'customer.activate_account.password' | t }}
+          </label>
+          <input
+            type="password"
+            id="activate-password"
+            name="customer[password]"
+            autocomplete="new-password"
+            required
+            class="input w-full"
+            placeholder="{{ 'customer.activate_account.password_placeholder' | t }}"
+          >
+        </div>
+
+        <div class="space-y-2">
+          <label for="activate-password-confirm" class="block text-sm font-medium">
+            {{ 'customer.activate_account.password_confirm' | t }}
+          </label>
+          <input
+            type="password"
+            id="activate-password-confirm"
+            name="customer[password_confirmation]"
+            autocomplete="new-password"
+            required
+            class="input w-full"
+            placeholder="{{ 'customer.activate_account.password_confirm_placeholder' | t }}"
+          >
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full">
+          {{ 'customer.activate_account.submit' | t }}
+        </button>
+
+        <p class="text-center text-sm text-[var(--muted-foreground)]">
+          <a href="{{ routes.account_login_url }}" class="text-[var(--primary)] hover:underline">
+            {{ 'customer.activate_account.decline' | t }}
+          </a>
+        </p>
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Activate Account",
+  "tag": "section",
+  "class": "section-activate-account",
+  "settings": []
+}
+{% endschema %}

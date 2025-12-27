@@ -1,0 +1,96 @@
+{%- comment -%}
+  Customer Login Section
+  Renders login form with glassmorphic styling.
+{%- endcomment -%}
+
+<div class="customer-login py-12 md:py-20">
+  <div class="container max-w-md mx-auto px-4">
+    <div class="glass rounded-2xl p-8 md:p-10 shadow-glass-lg">
+      <div class="text-center mb-8">
+        <h1 class="font-heading text-3xl md:text-4xl font-bold mb-2">
+          {{ 'customer.login.title' | t }}
+        </h1>
+        <p class="text-[var(--muted-foreground)]">
+          {{ 'customer.login.subtitle' | t }}
+        </p>
+      </div>
+
+      {%- form 'customer_login', class: 'space-y-6' -%}
+        {{ form.errors | default_errors }}
+
+        <div class="space-y-2">
+          <label for="customer-email" class="block text-sm font-medium">
+            {{ 'customer.login.email' | t }}
+          </label>
+          <input
+            type="email"
+            id="customer-email"
+            name="customer[email]"
+            autocomplete="email"
+            autocapitalize="off"
+            required
+            class="input w-full"
+            placeholder="{{ 'customer.login.email_placeholder' | t }}"
+          >
+        </div>
+
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <label for="customer-password" class="block text-sm font-medium">
+              {{ 'customer.login.password' | t }}
+            </label>
+            <a href="{{ routes.account_recover_url }}" class="text-sm text-[var(--primary)] hover:underline">
+              {{ 'customer.login.forgot_password' | t }}
+            </a>
+          </div>
+          <input
+            type="password"
+            id="customer-password"
+            name="customer[password]"
+            autocomplete="current-password"
+            required
+            class="input w-full"
+            placeholder="{{ 'customer.login.password_placeholder' | t }}"
+          >
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full">
+          {{ 'customer.login.submit' | t }}
+        </button>
+      {%- endform -%}
+
+      <div class="mt-8 pt-6 border-t border-[var(--border)] text-center">
+        <p class="text-[var(--muted-foreground)]">
+          {{ 'customer.login.no_account' | t }}
+          <a href="{{ routes.account_register_url }}" class="text-[var(--primary)] hover:underline font-medium">
+            {{ 'customer.login.create_account' | t }}
+          </a>
+        </p>
+      </div>
+    </div>
+
+    {%- if section.settings.show_guest_checkout and routes.root_url != shop.url -%}
+      <div class="mt-6 text-center">
+        <a href="{{ routes.root_url }}" class="text-[var(--muted-foreground)] hover:text-[var(--foreground)] text-sm">
+          {{ 'customer.login.guest_continue' | t }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Customer Login",
+  "tag": "section",
+  "class": "section-customer-login",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_guest_checkout",
+      "label": "Show guest checkout link",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

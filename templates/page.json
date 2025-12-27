@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "show_title": true,
+        "center_title": false,
+        "center_content": false,
+        "content_width": "4xl"
+      }
+    }
+  },
+  "order": ["main"]
+}

@@ -1,0 +1,106 @@
+{%- comment -%}
+  Customer Registration Section
+  Renders registration form with glassmorphic styling.
+{%- endcomment -%}
+
+<div class="customer-register py-12 md:py-20">
+  <div class="container max-w-md mx-auto px-4">
+    <div class="glass rounded-2xl p-8 md:p-10 shadow-glass-lg">
+      <div class="text-center mb-8">
+        <h1 class="font-heading text-3xl md:text-4xl font-bold mb-2">
+          {{ 'customer.register.title' | t }}
+        </h1>
+        <p class="text-[var(--muted-foreground)]">
+          {{ 'customer.register.subtitle' | t }}
+        </p>
+      </div>
+
+      {%- form 'create_customer', class: 'space-y-6' -%}
+        {{ form.errors | default_errors }}
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <label for="customer-first-name" class="block text-sm font-medium">
+              {{ 'customer.register.first_name' | t }}
+            </label>
+            <input
+              type="text"
+              id="customer-first-name"
+              name="customer[first_name]"
+              autocomplete="given-name"
+              required
+              class="input w-full"
+            >
+          </div>
+
+          <div class="space-y-2">
+            <label for="customer-last-name" class="block text-sm font-medium">
+              {{ 'customer.register.last_name' | t }}
+            </label>
+            <input
+              type="text"
+              id="customer-last-name"
+              name="customer[last_name]"
+              autocomplete="family-name"
+              required
+              class="input w-full"
+            >
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label for="customer-email" class="block text-sm font-medium">
+            {{ 'customer.register.email' | t }}
+          </label>
+          <input
+            type="email"
+            id="customer-email"
+            name="customer[email]"
+            autocomplete="email"
+            autocapitalize="off"
+            required
+            class="input w-full"
+            placeholder="{{ 'customer.register.email_placeholder' | t }}"
+          >
+        </div>
+
+        <div class="space-y-2">
+          <label for="customer-password" class="block text-sm font-medium">
+            {{ 'customer.register.password' | t }}
+          </label>
+          <input
+            type="password"
+            id="customer-password"
+            name="customer[password]"
+            autocomplete="new-password"
+            required
+            class="input w-full"
+            placeholder="{{ 'customer.register.password_placeholder' | t }}"
+          >
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full">
+          {{ 'customer.register.submit' | t }}
+        </button>
+      {%- endform -%}
+
+      <div class="mt-8 pt-6 border-t border-[var(--border)] text-center">
+        <p class="text-[var(--muted-foreground)]">
+          {{ 'customer.register.has_account' | t }}
+          <a href="{{ routes.account_login_url }}" class="text-[var(--primary)] hover:underline font-medium">
+            {{ 'customer.register.login' | t }}
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Customer Register",
+  "tag": "section",
+  "class": "section-customer-register",
+  "settings": []
+}
+{% endschema %}

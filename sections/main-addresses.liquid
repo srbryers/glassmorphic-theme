@@ -1,0 +1,312 @@
+{%- comment -%}
+  Customer Addresses Section
+  Renders address management interface.
+{%- endcomment -%}
+
+<div class="customer-addresses py-12 md:py-20">
+  <div class="container max-w-4xl mx-auto px-4">
+    <div class="mb-8">
+      <a href="{{ routes.account_url }}" class="inline-flex items-center gap-2 text-[var(--muted-foreground)] hover:text-[var(--foreground)] mb-4">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        {{ 'customer.addresses.back_to_account' | t }}
+      </a>
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <h1 class="font-heading text-3xl md:text-4xl font-bold">
+          {{ 'customer.addresses.title' | t }}
+        </h1>
+        <button
+          type="button"
+          class="btn btn-primary self-start"
+          onclick="document.getElementById('add-address-form').classList.toggle('hidden')"
+        >
+          {{ 'customer.addresses.add_new' | t }}
+        </button>
+      </div>
+    </div>
+
+    <div id="add-address-form" class="hidden glass rounded-2xl p-6 md:p-8 mb-8">
+      <h2 class="font-heading text-xl font-bold mb-6">{{ 'customer.addresses.add_new' | t }}</h2>
+      {%- form 'customer_address', customer.new_address, class: 'space-y-6' -%}
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <label for="address-first-name" class="block text-sm font-medium">
+              {{ 'customer.addresses.first_name' | t }}
+            </label>
+            <input
+              type="text"
+              id="address-first-name"
+              name="address[first_name]"
+              autocomplete="given-name"
+              class="input w-full"
+            >
+          </div>
+          <div class="space-y-2">
+            <label for="address-last-name" class="block text-sm font-medium">
+              {{ 'customer.addresses.last_name' | t }}
+            </label>
+            <input
+              type="text"
+              id="address-last-name"
+              name="address[last_name]"
+              autocomplete="family-name"
+              class="input w-full"
+            >
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label for="address-company" class="block text-sm font-medium">
+            {{ 'customer.addresses.company' | t }}
+          </label>
+          <input
+            type="text"
+            id="address-company"
+            name="address[company]"
+            autocomplete="organization"
+            class="input w-full"
+          >
+        </div>
+
+        <div class="space-y-2">
+          <label for="address-address1" class="block text-sm font-medium">
+            {{ 'customer.addresses.address1' | t }}
+          </label>
+          <input
+            type="text"
+            id="address-address1"
+            name="address[address1]"
+            autocomplete="address-line1"
+            class="input w-full"
+          >
+        </div>
+
+        <div class="space-y-2">
+          <label for="address-address2" class="block text-sm font-medium">
+            {{ 'customer.addresses.address2' | t }}
+          </label>
+          <input
+            type="text"
+            id="address-address2"
+            name="address[address2]"
+            autocomplete="address-line2"
+            class="input w-full"
+          >
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-4">
+          <div class="space-y-2">
+            <label for="address-city" class="block text-sm font-medium">
+              {{ 'customer.addresses.city' | t }}
+            </label>
+            <input
+              type="text"
+              id="address-city"
+              name="address[city]"
+              autocomplete="address-level2"
+              class="input w-full"
+            >
+          </div>
+          <div class="space-y-2">
+            <label for="address-country" class="block text-sm font-medium">
+              {{ 'customer.addresses.country' | t }}
+            </label>
+            <select
+              id="address-country"
+              name="address[country]"
+              autocomplete="country"
+              class="input w-full"
+              data-address-country-select
+            >
+              {{ all_country_option_tags }}
+            </select>
+          </div>
+          <div class="space-y-2">
+            <label for="address-province" class="block text-sm font-medium">
+              {{ 'customer.addresses.province' | t }}
+            </label>
+            <select
+              id="address-province"
+              name="address[province]"
+              autocomplete="address-level1"
+              class="input w-full"
+              data-address-province-select
+            >
+            </select>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <label for="address-zip" class="block text-sm font-medium">
+              {{ 'customer.addresses.zip' | t }}
+            </label>
+            <input
+              type="text"
+              id="address-zip"
+              name="address[zip]"
+              autocomplete="postal-code"
+              class="input w-full"
+            >
+          </div>
+          <div class="space-y-2">
+            <label for="address-phone" class="block text-sm font-medium">
+              {{ 'customer.addresses.phone' | t }}
+            </label>
+            <input
+              type="tel"
+              id="address-phone"
+              name="address[phone]"
+              autocomplete="tel"
+              class="input w-full"
+            >
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <input
+            type="checkbox"
+            id="address-default"
+            name="address[default]"
+            value="1"
+            class="rounded border-[var(--border)] text-[var(--primary)] focus:ring-[var(--primary)]"
+          >
+          <label for="address-default" class="text-sm">
+            {{ 'customer.addresses.set_default' | t }}
+          </label>
+        </div>
+
+        <div class="flex gap-4">
+          <button type="submit" class="btn btn-primary">
+            {{ 'customer.addresses.add' | t }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline"
+            onclick="document.getElementById('add-address-form').classList.add('hidden')"
+          >
+            {{ 'customer.addresses.cancel' | t }}
+          </button>
+        </div>
+      {%- endform -%}
+    </div>
+
+    {%- if customer.addresses.size > 0 -%}
+      <div class="grid md:grid-cols-2 gap-6">
+        {%- for address in customer.addresses -%}
+          <div class="glass rounded-xl p-6 relative">
+            {%- if address == customer.default_address -%}
+              <span class="absolute top-4 right-4 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[var(--primary)] text-white">
+                {{ 'customer.addresses.default' | t }}
+              </span>
+            {%- endif -%}
+
+            <address class="not-italic mb-4">
+              <p class="font-medium">{{ address.first_name }} {{ address.last_name }}</p>
+              {%- if address.company != blank -%}
+                <p class="text-[var(--muted-foreground)]">{{ address.company }}</p>
+              {%- endif -%}
+              <p class="text-[var(--muted-foreground)]">{{ address.address1 }}</p>
+              {%- if address.address2 != blank -%}
+                <p class="text-[var(--muted-foreground)]">{{ address.address2 }}</p>
+              {%- endif -%}
+              <p class="text-[var(--muted-foreground)]">{{ address.city }}, {{ address.province_code }} {{ address.zip }}</p>
+              <p class="text-[var(--muted-foreground)]">{{ address.country }}</p>
+              {%- if address.phone != blank -%}
+                <p class="text-[var(--muted-foreground)]">{{ address.phone }}</p>
+              {%- endif -%}
+            </address>
+
+            <div class="flex gap-4">
+              <button
+                type="button"
+                class="text-sm text-[var(--primary)] hover:underline"
+                onclick="toggleEditForm('{{ address.id }}')"
+              >
+                {{ 'customer.addresses.edit' | t }}
+              </button>
+              <button
+                type="button"
+                class="text-sm text-red-600 hover:underline"
+                onclick="confirmDelete('{{ address.url }}')"
+              >
+                {{ 'customer.addresses.delete' | t }}
+              </button>
+            </div>
+
+            <div id="edit-address-{{ address.id }}" class="hidden mt-6 pt-6 border-t border-[var(--border)]">
+              {%- form 'customer_address', address, class: 'space-y-4' -%}
+                <div class="grid grid-cols-2 gap-4">
+                  <input type="text" name="address[first_name]" value="{{ address.first_name }}" placeholder="{{ 'customer.addresses.first_name' | t }}" class="input w-full">
+                  <input type="text" name="address[last_name]" value="{{ address.last_name }}" placeholder="{{ 'customer.addresses.last_name' | t }}" class="input w-full">
+                </div>
+                <input type="text" name="address[company]" value="{{ address.company }}" placeholder="{{ 'customer.addresses.company' | t }}" class="input w-full">
+                <input type="text" name="address[address1]" value="{{ address.address1 }}" placeholder="{{ 'customer.addresses.address1' | t }}" class="input w-full">
+                <input type="text" name="address[address2]" value="{{ address.address2 }}" placeholder="{{ 'customer.addresses.address2' | t }}" class="input w-full">
+                <div class="grid grid-cols-3 gap-4">
+                  <input type="text" name="address[city]" value="{{ address.city }}" placeholder="{{ 'customer.addresses.city' | t }}" class="input w-full">
+                  <select name="address[country]" class="input w-full" data-address-country-select data-default="{{ address.country }}">{{ all_country_option_tags }}</select>
+                  <select name="address[province]" class="input w-full" data-address-province-select data-default="{{ address.province }}"></select>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                  <input type="text" name="address[zip]" value="{{ address.zip }}" placeholder="{{ 'customer.addresses.zip' | t }}" class="input w-full">
+                  <input type="tel" name="address[phone]" value="{{ address.phone }}" placeholder="{{ 'customer.addresses.phone' | t }}" class="input w-full">
+                </div>
+                <div class="flex items-center gap-2">
+                  <input type="checkbox" id="address-default-{{ address.id }}" name="address[default]" value="1" {% if address == customer.default_address %}checked{% endif %} class="rounded border-[var(--border)]">
+                  <label for="address-default-{{ address.id }}" class="text-sm">{{ 'customer.addresses.set_default' | t }}</label>
+                </div>
+                <div class="flex gap-4">
+                  <button type="submit" class="btn btn-primary btn-sm">{{ 'customer.addresses.update' | t }}</button>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="toggleEditForm('{{ address.id }}')">{{ 'customer.addresses.cancel' | t }}</button>
+                </div>
+              {%- endform -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <div class="glass rounded-2xl p-12 text-center">
+        <div class="w-16 h-16 rounded-full bg-[var(--muted)] flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-[var(--muted-foreground)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </div>
+        <h3 class="font-medium mb-2">{{ 'customer.addresses.empty_title' | t }}</h3>
+        <p class="text-[var(--muted-foreground)]">{{ 'customer.addresses.empty_description' | t }}</p>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<script>
+  function toggleEditForm(id) {
+    document.getElementById('edit-address-' + id).classList.toggle('hidden');
+  }
+
+  function confirmDelete(url) {
+    if (confirm('{{ 'customer.addresses.delete_confirm' | t }}')) {
+      const form = document.createElement('form');
+      form.method = 'post';
+      form.action = url;
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = '_method';
+      input.value = 'delete';
+      form.appendChild(input);
+      document.body.appendChild(form);
+      form.submit();
+    }
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Customer Addresses",
+  "tag": "section",
+  "class": "section-customer-addresses",
+  "settings": []
+}
+{% endschema %}
