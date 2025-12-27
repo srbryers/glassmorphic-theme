@@ -7,7 +7,7 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
- {
+{
   "sections": {
     "hero": {
       "type": "hero",
@@ -33,7 +33,7 @@
                 "text": "Just a great white tee.",
                 "heading_tag": "h1",
                 "size": "3xl",
-                "color": "default",
+                "color": "primary",
                 "custom_color": "#000000",
                 "alignment": "right",
                 "font_style": "heading",
@@ -47,7 +47,7 @@
               "settings": {
                 "text": "<p>No, really, that's it.</p>",
                 "size": "base",
-                "color": "muted",
+                "color": "black",
                 "custom_color": "#000000",
                 "alignment": "left",
                 "max_width": "none"
