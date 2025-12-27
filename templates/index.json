@@ -41,19 +41,6 @@
               },
               "blocks": {}
             },
-            "rich_text_H8zJet": {
-              "type": "rich-text",
-              "name": "Body text",
-              "settings": {
-                "text": "<p>No, really, that's it.</p>",
-                "size": "base",
-                "color": "black",
-                "custom_color": "#000000",
-                "alignment": "left",
-                "max_width": "none"
-              },
-              "blocks": {}
-            },
             "button_group_Rmfaxi": {
               "type": "button-group",
               "name": "Button group",
@@ -84,7 +71,6 @@
           },
           "block_order": [
             "heading_qPXkXf",
-            "rich_text_H8zJet",
             "button_group_Rmfaxi"
           ]
         }
@@ -143,7 +129,7 @@
       "settings": {
         "product": "heavyweight-t-shirt",
         "eyebrow": "Introducing",
-        "heading": "The Heavyweight Tee",
+        "heading": "The Great White Tee",
         "description": "Our signature piece, crafted from premium heavyweight cotton for lasting comfort and durability. This is the only t-shirt you'll ever need.",
         "button_text": "Shop Now",
         "button_link": "",
