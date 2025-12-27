@@ -1,0 +1,230 @@
+{% doc %}
+  Renders a full-screen lightbox for image zoom/viewing.
+  Listens for 'modal:open' events with id 'image-zoom'.
+  Images are passed via JavaScript events, not Liquid parameters.
+
+  @example
+  {% render 'lightbox' %}
+{% enddoc %}
+
+<div
+  data-island="lightbox"
+  data-hydrate="idle"
+>
+  <lightbox-island>
+    <div
+      data-lightbox
+      class="lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-label="{{ 'accessibility.image_zoom' | t | default: 'Image zoom' }}"
+      aria-hidden="true"
+    >
+      <div data-lightbox-overlay class="lightbox__overlay"></div>
+
+      <div class="lightbox__container">
+        <button
+          data-lightbox-close
+          class="lightbox__close btn-icon"
+          aria-label="{{ 'accessibility.close' | t | default: 'Close' }}"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+
+        <button
+          data-lightbox-prev
+          class="lightbox__nav lightbox__nav--prev btn-icon"
+          aria-label="{{ 'accessibility.previous_image' | t | default: 'Previous image' }}"
+        >
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+
+        <div class="lightbox__image-wrapper">
+          <img
+            data-lightbox-image
+            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+            alt=""
+            width="1600"
+            height="1600"
+            class="lightbox__image"
+          >
+        </div>
+
+        <button
+          data-lightbox-next
+          class="lightbox__nav lightbox__nav--next btn-icon"
+          aria-label="{{ 'accessibility.next_image' | t | default: 'Next image' }}"
+        >
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </button>
+
+        <div data-lightbox-counter class="lightbox__counter glass">
+          <span data-lightbox-current>1</span> / <span data-lightbox-total>1</span>
+        </div>
+      </div>
+    </div>
+  </lightbox-island>
+</div>
+
+{% stylesheet %}
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.lightbox[aria-hidden="false"] {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(8px);
+}
+
+.lightbox__container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+}
+
+.lightbox__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border-radius: 50%;
+  color: white;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.lightbox__close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.lightbox__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border-radius: 50%;
+  color: white;
+  transition: background 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+
+.lightbox__nav:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.lightbox__nav:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.lightbox__nav--prev {
+  left: 1rem;
+}
+
+.lightbox__nav--next {
+  right: 1rem;
+}
+
+.lightbox__image-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 4rem 5rem;
+}
+
+.lightbox__image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 0.5rem;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.lightbox__image.loaded {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.lightbox__counter {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+@media (max-width: 640px) {
+  .lightbox__nav {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .lightbox__nav--prev {
+    left: 0.5rem;
+  }
+
+  .lightbox__nav--next {
+    right: 0.5rem;
+  }
+
+  .lightbox__image-wrapper {
+    padding: 3rem 2.5rem;
+  }
+
+  .lightbox__close {
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+{% endstylesheet %}

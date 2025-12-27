@@ -36,7 +36,8 @@
     "previous_image": "Previous image",
     "next_image": "Next image",
     "view_image": "View image {{ index }}",
-    "quick_view": "Quick view {{ title }}"
+    "quick_view": "Quick view {{ title }}",
+    "image_zoom": "Image zoom"
   },
   "products": {
     "add_to_cart": "Add to cart",

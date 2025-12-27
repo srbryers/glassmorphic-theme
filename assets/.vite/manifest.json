@@ -5,12 +5,12 @@
     "isDynamicEntry": true
   },
   "frontend/entrypoints/theme.css": {
-    "file": "theme-j5kGYlPY.css",
+    "file": "theme-DD_AaEWI.css",
     "src": "frontend/entrypoints/theme.css",
     "isEntry": true
   },
   "frontend/entrypoints/theme.ts": {
-    "file": "theme-DMgPsJr1.js",
+    "file": "theme-BlWW-y0i.js",
     "name": "theme",
     "src": "frontend/entrypoints/theme.ts",
     "isEntry": true,
@@ -19,6 +19,7 @@
       "_island-cart-drawer-BXBOsEp0.js",
       "frontend/islands/header-nav.ts",
       "frontend/islands/image-gallery.ts",
+      "frontend/islands/lightbox.ts",
       "frontend/islands/modal.ts",
       "frontend/islands/product-form.ts",
       "frontend/islands/quantity-selector.ts",
@@ -41,9 +42,15 @@
     "isDynamicEntry": true
   },
   "frontend/islands/image-gallery.ts": {
-    "file": "island-image-gallery-DPCs2U38.js",
+    "file": "island-image-gallery-DzauLLGm.js",
     "name": "island-image-gallery",
     "src": "frontend/islands/image-gallery.ts",
+    "isDynamicEntry": true
+  },
+  "frontend/islands/lightbox.ts": {
+    "file": "island-lightbox-jmnhKFfl.js",
+    "name": "island-lightbox",
+    "src": "frontend/islands/lightbox.ts",
     "isDynamicEntry": true
   },
   "frontend/islands/modal.ts": {

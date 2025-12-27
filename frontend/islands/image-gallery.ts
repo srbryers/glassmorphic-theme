@@ -102,6 +102,13 @@ class ImageGallery extends HTMLElement {
       this.handleVariantChange(e.detail)
     }) as EventListener)
 
+    // Listen for lightbox navigation to sync gallery
+    document.addEventListener('lightbox:change', ((e: CustomEvent) => {
+      if (e.detail.index !== undefined) {
+        this.goTo(e.detail.index)
+      }
+    }) as EventListener)
+
     // Main image click (zoom)
     this.mainImage?.addEventListener('click', () => {
       this.openZoom()
@@ -195,15 +202,15 @@ class ImageGallery extends HTMLElement {
   }
 
   private openZoom() {
-    const currentImage = this.images[this.currentIndex]
-    if (!currentImage) return
+    if (this.images.length === 0) return
 
-    // Dispatch zoom event for modal or lightbox
+    // Dispatch zoom event for lightbox with all images
     document.dispatchEvent(
       new CustomEvent('modal:open', {
         detail: {
           id: 'image-zoom',
-          image: currentImage
+          images: this.images,
+          currentIndex: this.currentIndex
         }
       })
     )
