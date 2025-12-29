@@ -1,11 +1,31 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "type": "footer",
   "name": "Footer group",
   "sections": {
     "footer": {
       "type": "footer",
-      "settings": {}
+      "settings": {
+        "logo": "shopify://shop_images/Beacons_Logo_-_Vector_white_ccb12419-9c8e-4f37-b80a-b40626e01f02.png",
+        "logo_width": 120,
+        "show_store_name": false,
+        "description": "Quality basics for everyday.",
+        "show_newsletter": true,
+        "newsletter_title": "Stay Updated",
+        "newsletter_description": "Subscribe to our newsletter for updates and exclusive offers.",
+        "legal_menu": ""
+      }
     }
   },
-  "order": ["footer"]
+  "order": [
+    "footer"
+  ]
 }
