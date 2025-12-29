@@ -54,7 +54,7 @@
                   "type": "button",
                   "settings": {
                     "label": "Get yours",
-                    "link": "shopify://products/heavyweight-t-shirt",
+                    "link": "shopify://products/great-light-tee",
                     "style": "secondary",
                     "size": "md",
                     "show_arrow": true,
