@@ -16,6 +16,7 @@
       {%- endif -%}
     </div>
 
+
     {%- if section.settings.show_tags and blog.all_tags.size > 0 -%}
       <div class="flex flex-wrap justify-center gap-2 mb-8">
         <a
@@ -132,13 +133,15 @@
       "default": 6
     },
     {
-      "type": "range",
+      "type": "select",
       "id": "columns",
       "label": "Columns on desktop",
-      "min": 2,
-      "max": 3,
-      "step": 1,
-      "default": 3
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "3"
     },
     {
       "type": "checkbox",
