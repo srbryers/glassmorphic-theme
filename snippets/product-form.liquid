@@ -6,6 +6,7 @@
   @param {boolean} [show_stock_level] - Whether to show stock levels
   @param {string} [stock_display_style] - Display style: 'count' or 'low_only'
   @param {number} [low_stock_threshold] - Threshold for low stock warning
+  @param {boolean} [size_guide_enabled] - Whether size guide is available
 
   @example
   {% render 'product-form', product: product %}
@@ -53,11 +54,29 @@
       {%- comment -%} Variant selector with enhanced styling {%- endcomment -%}
       {%- unless product.has_only_default_variant -%}
         {%- for option in product.options_with_values -%}
+          {%- liquid
+            assign option_name_lower = option.name | downcase
+            assign is_size_option = false
+            if option_name_lower == 'size' or option_name_lower == 'taille' or option_name_lower == 'talla' or option_name_lower == 'größe'
+              assign is_size_option = true
+            endif
+          -%}
           <div class="form-field mb-5">
-            <label class="label mb-3 block">
-              <span class="font-heading text-base uppercase tracking-wide text-[var(--foreground)]">{{ option.name }}</span>
-              <span class="text-[var(--muted-foreground)] font-normal ml-2 text-sm">{{ option.selected_value }}</span>
-            </label>
+            <div class="label mb-3 flex items-center justify-between">
+              <span>
+                <span class="font-heading text-base uppercase tracking-wide text-[var(--foreground)]">{{ option.name }}</span>
+                <span class="text-[var(--muted-foreground)] font-normal ml-2 text-sm">{{ option.selected_value }}</span>
+              </span>
+              {%- if is_size_option and size_guide_enabled -%}
+                <button
+                  type="button"
+                  data-modal-trigger="size-guide"
+                  class="text-sm text-[var(--primary)] hover:underline focus:outline-none focus:underline transition-colors"
+                >
+                  {{ 'products.size_guide.link' | t | default: 'Size Guide' }}
+                </button>
+              {%- endif -%}
+            </div>
             <div class="flex flex-wrap gap-2">
               {%- for value in option.values -%}
                 {%- assign option_index = forloop.parentloop.index0 -%}

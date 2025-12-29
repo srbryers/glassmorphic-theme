@@ -12,6 +12,13 @@
     "main-product": {
       "type": "main-product",
       "blocks": {
+        "size_guide_UiX4T6": {
+          "type": "size-guide",
+          "source": "{{ product.metafields.custom.size_guide.value }}",
+          "settings": {
+            "title": ""
+          }
+        },
         "accordion-shipping": {
           "type": "accordion",
           "settings": {
@@ -28,13 +35,18 @@
         }
       },
       "block_order": [
+        "size_guide_UiX4T6",
         "accordion-shipping",
         "accordion-care"
       ],
       "custom_css": [
         "section {padding-bottom: 150px;}"
       ],
-      "settings": {}
+      "settings": {
+        "show_stock_level": false,
+        "stock_display_style": "count",
+        "low_stock_threshold": 5
+      }
     }
   },
   "order": [

@@ -5,12 +5,12 @@
     "isDynamicEntry": true
   },
   "frontend/entrypoints/theme.css": {
-    "file": "theme-B2ctQJC_.css",
+    "file": "theme-ByGuRK46.css",
     "src": "frontend/entrypoints/theme.css",
     "isEntry": true
   },
   "frontend/entrypoints/theme.ts": {
-    "file": "theme-BlWW-y0i.js",
+    "file": "theme-C8lf2YbP.js",
     "name": "theme",
     "src": "frontend/entrypoints/theme.ts",
     "isEntry": true,
@@ -24,6 +24,7 @@
       "frontend/islands/product-form.ts",
       "frontend/islands/quantity-selector.ts",
       "frontend/islands/quick-view.ts",
+      "frontend/islands/size-guide.ts",
       "frontend/islands/test-counter.ts",
       "frontend/islands/test-reveal.ts",
       "frontend/islands/test-toast.ts"
@@ -82,6 +83,12 @@
     "imports": [
       "_island-cart-drawer-BXBOsEp0.js"
     ]
+  },
+  "frontend/islands/size-guide.ts": {
+    "file": "island-size-guide-GbgXTrJR.js",
+    "name": "island-size-guide",
+    "src": "frontend/islands/size-guide.ts",
+    "isDynamicEntry": true
   },
   "frontend/islands/test-counter.ts": {
     "file": "island-test-counter-iJMqeeKp.js",

@@ -30,7 +30,7 @@
       {%- if has_images -%}
       <img
         data-main-image
-        src="{{ featured | image_url: width: 1200 }}"
+        src="{{ featured | image_url: width: 1600 }}"
         alt="{{ featured.alt | default: product.title }}"
         class="w-full h-full object-cover transition-all duration-300"
         width="800"
@@ -80,7 +80,7 @@
         {%- for image in gallery_images -%}
           <button
             data-thumbnail
-            data-full-src="{{ image | image_url: width: 800 }}"
+            data-full-src="{{ image | image_url: width: 1600 }}"
             class="aspect-product bg-[var(--muted)] rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-lg hover:scale-105 {% if forloop.first %}ring-2 ring-[var(--primary)] ring-offset-2 scale-[1.02]{% else %}opacity-70 hover:opacity-100{% endif %}"
             role="tab"
             aria-selected="{{ forloop.first }}"

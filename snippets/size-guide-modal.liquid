@@ -1,0 +1,143 @@
+{% doc %}
+  Renders a size guide modal with dynamic table generation.
+  Uses data from product's custom.size_guide metaobject.
+
+  @param {string} [title] - Modal title (default: translation)
+  @param {object} column_headers - Metaobject list field containing column headers
+  @param {object} rows - Metaobject list field containing row objects with 'label' and 'values'
+
+  @example
+  {% render 'size-guide-modal', title: guide_title, column_headers: column_headers, rows: rows %}
+{% enddoc %}
+
+{%- liquid
+  if title != blank
+    assign modal_title = title
+  else
+    assign modal_title = 'products.size_guide.title' | t
+  endif
+
+  assign has_content = false
+  if column_headers != blank and rows.size > 0
+    assign has_content = true
+  endif
+-%}
+
+{%- if has_content -%}
+<div
+  data-island="size-guide"
+  data-hydrate="idle"
+>
+  <size-guide-island
+    class="fixed inset-0 z-50 hidden"
+    data-modal-id="size-guide"
+    aria-labelledby="size-guide-title"
+    aria-modal="true"
+    role="dialog"
+  >
+    {%- comment -%} Overlay {%- endcomment -%}
+    <div
+      data-modal-overlay
+      class="fixed inset-0 bg-black/40 backdrop-blur-soft opacity-0 transition-opacity duration-300 hidden"
+    ></div>
+
+    {%- comment -%} Dialog {%- endcomment -%}
+    <div class="fixed inset-0 flex items-center justify-center p-4">
+      <div
+        data-modal-dialog
+        class="w-full max-w-2xl bg-[var(--card)] border border-[var(--border)] rounded-2xl shadow-lg opacity-0 scale-95 transition-all duration-300 hidden max-h-[90vh] overflow-hidden flex flex-col"
+      >
+        {%- comment -%} Header {%- endcomment -%}
+        <div class="flex items-center justify-between px-6 py-4 border-b border-[var(--border)]">
+          <h2 id="size-guide-title" class="text-lg font-bold text-[var(--foreground)]">
+            {{ modal_title }}
+          </h2>
+          <button
+            data-modal-close
+            type="button"
+            class="btn-icon"
+            aria-label="{{ 'accessibility.close_modal' | t }}"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        {%- comment -%} Content {%- endcomment -%}
+        <div class="px-6 py-4 overflow-y-auto flex-1">
+          <div class="size-guide__table">
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  {%- for header in column_headers.value -%}
+                    <th>{{ header }}</th>
+                  {%- endfor -%}
+                </tr>
+              </thead>
+              <tbody>
+                {%- for row in rows -%}
+                  <tr>
+                    <td>{{ row.label }}</td>
+                    {%- for value in row.values.value -%}
+                      <td>{{ value }}</td>
+                    {%- endfor -%}
+                  </tr>
+                {%- endfor -%}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </size-guide-island>
+</div>
+
+<style>
+  .size-guide__table {
+    overflow-x: auto;
+  }
+
+  .size-guide__table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+
+  .size-guide__table th,
+  .size-guide__table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .size-guide__table th {
+    font-weight: 600;
+    color: var(--foreground);
+    background-color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .size-guide__table thead tr th:first-child {
+    border-top-left-radius: var(--radius-lg);
+  }
+
+  .size-guide__table thead tr th:last-child {
+    border-top-right-radius: var(--radius-lg);
+  }
+
+  .size-guide__table td {
+    color: var(--muted-foreground);
+  }
+
+  .size-guide__table td:first-child {
+    font-weight: 600;
+    color: var(--foreground);
+  }
+
+  .size-guide__table tbody tr:hover td {
+    background-color: var(--muted);
+  }
+</style>
+{%- endif -%}

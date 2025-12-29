@@ -62,12 +62,45 @@
             <span class="text-sm text-[var(--muted-foreground)]">0 {{ 'products.reviews' | t | default: 'reviews' }}</span>
           </div>
 
+          {%- comment -%} Size Guide (metaobject) {%- endcomment -%}
+          {%- assign size_guide_enabled = false -%}
+          {%- assign guide_title = blank -%}
+          {%- assign column_headers = blank -%}
+          {%- assign size_guide_rows = blank -%}
+
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'size-guide' -%}
+              {%- liquid
+                assign size_guide_metaobject = product.metafields.custom.size_guide.value
+
+                if size_guide_metaobject != blank
+                  assign guide_title = block.settings.title | default: size_guide_metaobject.title
+                  assign column_headers = size_guide_metaobject.column_headers
+                  assign size_guide_rows = size_guide_metaobject.rows.value
+                  if column_headers != blank and size_guide_rows.size > 0
+                    assign size_guide_enabled = true
+                  endif
+                endif
+              -%}
+
+              {%- if size_guide_enabled -%}
+                <div data-size-guide-enabled style="display: none;" {{ block.shopify_attributes }}></div>
+                {% render 'size-guide-modal',
+                  title: guide_title,
+                  column_headers: column_headers,
+                  rows: size_guide_rows
+                %}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+
           {%- comment -%} Product Form {%- endcomment -%}
           {% render 'product-form',
             product: product,
             show_stock_level: section.settings.show_stock_level,
             stock_display_style: section.settings.stock_display_style,
-            low_stock_threshold: section.settings.low_stock_threshold
+            low_stock_threshold: section.settings.low_stock_threshold,
+            size_guide_enabled: size_guide_enabled
           %}
         </div>
 
@@ -181,6 +214,23 @@
     }
   ],
   "blocks": [
+    {
+      "type": "size-guide",
+      "name": "Size Guide",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Displays size guide from the product's custom.size_guide metafield."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title override",
+          "info": "Optional. Overrides the metaobject title if set."
+        }
+      ]
+    },
     {
       "type": "accordion",
       "name": "Accordion item",
