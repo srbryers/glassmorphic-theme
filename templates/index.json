@@ -33,7 +33,7 @@
                 "text": "Just a great white tee.",
                 "heading_tag": "h1",
                 "size": "3xl",
-                "color": "primary",
+                "color": "black",
                 "custom_color": "#000000",
                 "alignment": "right",
                 "font_style": "heading",
@@ -55,7 +55,7 @@
                   "settings": {
                     "label": "Get yours",
                     "link": "shopify://products/heavyweight-t-shirt",
-                    "style": "primary",
+                    "style": "secondary",
                     "size": "md",
                     "show_arrow": true,
                     "full_width": false,
@@ -83,7 +83,7 @@
       ],
       "settings": {
         "background_type": "image",
-        "background_image": "shopify://shop_images/Male_-_Lifestyle_-_NE_Coast_Left.png",
+        "background_image": "shopify://shop_images/Male_-_Lifestyle_-_NE_Coast_Left_0940c6e2-ebef-45f0-81a0-38b8c4f95041.png",
         "background_video_url": "",
         "overlay_opacity": 35,
         "show_lighthouse_beam": true,
