@@ -23,6 +23,14 @@ class ImageGallery extends HTMLElement {
   private touchStartX = 0
   private touchEndX = 0
 
+  // Zoom elements
+  private wrapper: HTMLElement | null = null
+  private imageContainer: HTMLElement | null = null
+  private zoomLens: HTMLElement | null = null
+  private zoomResult: HTMLElement | null = null
+  private isZoomEnabled = false
+  private isOverNavigation = false
+
   connectedCallback() {
     console.log('[Island] image-gallery hydrated (client:visible)')
 
@@ -31,8 +39,15 @@ class ImageGallery extends HTMLElement {
     this.prevButton = this.querySelector('[data-prev]')
     this.nextButton = this.querySelector('[data-next]')
 
+    // Zoom elements (wrapper is the parent island container)
+    this.wrapper = this.closest('[data-island="image-gallery"]')
+    this.imageContainer = this.querySelector('[data-image-container]')
+    this.zoomLens = this.querySelector('[data-zoom-lens]')
+    this.zoomResult = this.wrapper?.querySelector('[data-zoom-result]') || null
+
     this.loadImages()
     this.setupEventListeners()
+    this.initZoom()
     this.updateUI()
 
     this.setAttribute('data-hydrated', 'true')
@@ -184,6 +199,9 @@ class ImageGallery extends HTMLElement {
           this.mainImage.src = currentImage.src
           this.mainImage.alt = currentImage.alt
           this.mainImage.classList.remove('opacity-0')
+
+          // Update zoom background when image changes
+          this.updateZoomBackground()
         }
       }, 150)
     }
@@ -214,6 +232,86 @@ class ImageGallery extends HTMLElement {
         }
       })
     )
+  }
+
+  // Magnifying glass zoom methods
+  private initZoom() {
+    // Only enable zoom on desktop (lg breakpoint = 1024px)
+    const mediaQuery = window.matchMedia('(min-width: 1024px)')
+    this.isZoomEnabled = mediaQuery.matches
+
+    mediaQuery.addEventListener('change', (e) => {
+      this.isZoomEnabled = e.matches
+      if (!e.matches) {
+        this.hideZoom()
+      }
+    })
+
+    if (!this.imageContainer || !this.zoomLens || !this.zoomResult) return
+
+    // Mouse events for zoom
+    this.imageContainer.addEventListener('mouseenter', () => this.showZoom())
+    this.imageContainer.addEventListener('mouseleave', () => this.hideZoom())
+    this.imageContainer.addEventListener('mousemove', (e) => this.handleZoomMove(e))
+
+    // Hide zoom when hovering over navigation buttons
+    this.prevButton?.addEventListener('mouseenter', () => {
+      this.isOverNavigation = true
+      this.hideZoom()
+    })
+    this.nextButton?.addEventListener('mouseenter', () => {
+      this.isOverNavigation = true
+      this.hideZoom()
+    })
+    this.prevButton?.addEventListener('mouseleave', () => {
+      this.isOverNavigation = false
+      this.showZoom()
+    })
+    this.nextButton?.addEventListener('mouseleave', () => {
+      this.isOverNavigation = false
+      this.showZoom()
+    })
+
+    // Set initial zoom background
+    this.updateZoomBackground()
+  }
+
+  private showZoom() {
+    if (!this.isZoomEnabled || !this.wrapper || this.isOverNavigation) return
+    this.wrapper.classList.add('zoom-active')
+  }
+
+  private hideZoom() {
+    if (!this.wrapper) return
+    this.wrapper.classList.remove('zoom-active')
+  }
+
+  private handleZoomMove(e: MouseEvent) {
+    if (!this.isZoomEnabled || !this.imageContainer || !this.zoomLens || !this.zoomResult || this.isOverNavigation) return
+
+    const rect = this.imageContainer.getBoundingClientRect()
+
+    // Calculate mouse position as percentage (0-100)
+    const x = ((e.clientX - rect.left) / rect.width) * 100
+    const y = ((e.clientY - rect.top) / rect.height) * 100
+
+    // Clamp values to prevent lens from going outside image
+    const clampedX = Math.max(0, Math.min(100, x))
+    const clampedY = Math.max(0, Math.min(100, y))
+
+    // Position the lens indicator
+    this.zoomLens.style.left = `${clampedX}%`
+    this.zoomLens.style.top = `${clampedY}%`
+
+    // Set background position on zoom result
+    this.zoomResult.style.backgroundPosition = `${clampedX}% ${clampedY}%`
+  }
+
+  private updateZoomBackground() {
+    if (!this.zoomResult || !this.mainImage) return
+
+    // Use the current main image as the zoom background
+    this.zoomResult.style.backgroundImage = `url('${this.mainImage.src}')`
   }
 }
 

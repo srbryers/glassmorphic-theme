@@ -33,8 +33,9 @@
         {%- comment -%} Logo {%- endcomment -%}
         <a href="{{ routes.root_url }}" class="inline-block mb-4 hover:opacity-80 transition-opacity">
           {%- if section.settings.logo -%}
+            {%- assign logo_width_2x = section.settings.logo_width | times: 2 -%}
             <img
-              src="{{ section.settings.logo | image_url: width: section.settings.logo_width | times: 2 }}"
+              src="{{ section.settings.logo | image_url: width: logo_width_2x }}"
               alt="{{ shop.name }}"
               width="{{ section.settings.logo_width }}"
               height="{{ section.settings.logo_width | divided_by: section.settings.logo.aspect_ratio }}"
@@ -47,6 +48,8 @@
             <img
               src="{{ 'Beacons Logo - Patch - White.png' | asset_url }}"
               alt="{{ shop.name }}"
+              width="{{ section.settings.logo_width }}"
+              height="{{ section.settings.logo_width }}"
               class="h-auto"
               style="width: {{ section.settings.logo_width }}px;"
               loading="lazy"

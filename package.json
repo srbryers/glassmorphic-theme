@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npm:vite\" \"npm:shopify:dev\"",
+    "dev:tunnel": "VITE_TUNNEL=true concurrently \"npm:vite\" \"npm:shopify:dev\"",
     "vite": "vite",
     "build": "vite build",
     "shopify:dev": "shopify theme dev --store attribute-apps",

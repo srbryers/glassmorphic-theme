@@ -7,7 +7,8 @@ export default defineConfig({
   plugins: [
     shopify({
       // Use Cloudflare tunnel for HTTPS - required for theme customizer
-      tunnel: true
+      // Set VITE_TUNNEL=true to enable, or run: VITE_TUNNEL=true npm run dev
+      tunnel: process.env.VITE_TUNNEL === 'true'
     }),
     tailwindcss()
   ],
