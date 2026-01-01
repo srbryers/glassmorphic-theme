@@ -10,7 +10,7 @@
     "isEntry": true
   },
   "frontend/entrypoints/theme.ts": {
-    "file": "theme-B3IRpv17.js",
+    "file": "theme-D6bdy0Ys.js",
     "name": "theme",
     "src": "frontend/entrypoints/theme.ts",
     "isEntry": true,
@@ -43,7 +43,7 @@
     "isDynamicEntry": true
   },
   "frontend/islands/image-gallery.ts": {
-    "file": "island-image-gallery-DJ_bggMv.js",
+    "file": "island-image-gallery-CfiKA3Ay.js",
     "name": "island-image-gallery",
     "src": "frontend/islands/image-gallery.ts",
     "isDynamicEntry": true
