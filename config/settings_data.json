@@ -37,12 +37,8 @@
         "disabled": false,
         "settings": {
           "enable": true,
-          "display_mode": "inline",
-          "floating_position": "bottom-right",
-          "checkout_button_selector": "#checkout, button[name='checkout'], [data-cart-checkout], .cart__checkout-button",
-          "debug_mode": false,
-          "custom_css": "",
-          "api_url_override": ""
+          "debug_mode": true,
+          "api_url_override": "https://sb-testing.ngrok.app"
         }
       }
     }
