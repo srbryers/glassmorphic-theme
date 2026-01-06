@@ -38,7 +38,7 @@
         "settings": {
           "enable": true,
           "debug_mode": true,
-          "api_url_override": "https://sb-testing.ngrok.app"
+          "api_url_override": ""
         }
       }
     }
